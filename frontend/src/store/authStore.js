@@ -95,4 +95,17 @@ export const useAuthStore = create((set) => ({
 			throw error;
 		}
 	},
+	changePassword: async (currentPassword, newPassword) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post(`${API_URL}/change-password`, { currentPassword, newPassword });
+			set({ message: response.data.message, isLoading: false });
+		} catch (error) {
+			set({
+				isLoading: false,
+				error: error.response.data.message || "Error changing password",
+			});
+			throw error;
+		}
+	},
 }));

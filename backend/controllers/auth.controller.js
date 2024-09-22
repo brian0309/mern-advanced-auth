@@ -197,3 +197,27 @@ export const checkAuth = async (req, res) => {
 		res.status(400).json({ success: false, message: error.message });
 	}
 };
+
+export const changePassword = async (req, res) => {
+	const { currentPassword, newPassword } = req.body;
+	try {
+		const user = await User.findById(req.userId);
+		if (!user) {
+			return res.status(400).json({ success: false, message: "User not found" });
+		}
+
+		const isPasswordValid = await bcryptjs.compare(currentPassword, user.password);
+		if (!isPasswordValid) {
+			return res.status(400).json({ success: false, message: "Current password is incorrect" });
+		}
+
+		const hashedPassword = await bcryptjs.hash(newPassword, 10);
+		user.password = hashedPassword;
+		await user.save();
+
+		res.status(200).json({ success: true, message: "Password changed successfully" });
+	} catch (error) {
+		console.log("Error in changePassword ", error);
+		res.status(400).json({ success: false, message: error.message });
+	}
+};

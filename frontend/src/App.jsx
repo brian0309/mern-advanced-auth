@@ -7,6 +7,7 @@ import EmailVerificationPage from "./pages/EmailVerificationPage";
 import DashboardPage from "./pages/DashboardPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage"; // Import the new page
 
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -99,6 +100,14 @@ function App() {
 						<RedirectAuthenticatedUser>
 							<ResetPasswordPage />
 						</RedirectAuthenticatedUser>
+					}
+				/>
+				<Route
+					path='/change-password'
+					element={
+						<ProtectedRoute>
+							<ChangePasswordPage />
+						</ProtectedRoute>
 					}
 				/>
 				{/* catch all routes */}
