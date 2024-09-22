@@ -4,18 +4,22 @@ import { useAuthStore } from "../store/authStore";
 import Input from "../components/Input";
 import { Lock } from "lucide-react";
 import toast from "react-hot-toast";
+import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 
 const ChangePasswordPage = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const { changePassword, error, isLoading } = useAuthStore();
+    const [formError, setFormError] = useState(""); // State to manage form error
+    const { changePassword, clearError, error, isLoading } = useAuthStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setFormError(""); // Reset form error
+        clearError(); // Clear the error from the store
 
         if (newPassword !== confirmNewPassword) {
-            alert("New passwords do not match");
+            setFormError("New passwords do not match");
             return;
         }
         try {
@@ -23,7 +27,11 @@ const ChangePasswordPage = () => {
             toast.success("Password changed successfully");
         } catch (error) {
             console.error(error);
-            toast.error(error.message || "Error changing password");
+            if (error.response && error.response.status === 400) {
+                setFormError("Current password is incorrect");
+            } else {
+                setFormError(error.message || "Error changing password");
+            }
         }
     };
 
@@ -38,7 +46,8 @@ const ChangePasswordPage = () => {
                 <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
                     Change Password
                 </h2>
-                {error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
+                {formError && <p className='text-red-500 text-sm mb-4'>{formError}</p>} {/* Display form error */}
+                {!formError && error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
 
                 <form onSubmit={handleSubmit}>
                     <Input
@@ -57,6 +66,9 @@ const ChangePasswordPage = () => {
                         onChange={(e) => setNewPassword(e.target.value)}
                         required
                     />
+                    <div className='mb-4'>
+                        <PasswordStrengthMeter password={newPassword} />
+                    </div>
                     <Input
                         icon={Lock}
                         type='password'
