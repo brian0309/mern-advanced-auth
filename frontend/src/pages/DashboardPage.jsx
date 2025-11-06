@@ -1,92 +1,144 @@
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import { formatDate } from "../utils/date";
-import { useNavigate } from "react-router-dom";
-import SidebarMenuLayout from '../components/SidebarMenuLayout';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Users, FileText, MessageSquare, Calendar, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+
+const stats = [
+  { name: 'Total Users', value: '2,420', change: '+11%', changeType: 'increase', icon: Users },
+  { name: 'Total Posts', value: '1,210', change: '+5.4%', changeType: 'increase', icon: FileText },
+  { name: 'Messages', value: '568', change: '-2.3%', changeType: 'decrease', icon: MessageSquare },
+  { name: 'Upcoming Events', value: '12', change: '+3', changeType: 'neutral', icon: Calendar },
+];
+
+const recentActivity = [
+  { id: 1, user: 'John Doe', action: 'created a new post', time: '2 minutes ago', avatar: 'JD' },
+  { id: 2, user: 'Jane Smith', action: 'updated profile', time: '10 minutes ago', avatar: 'JS' },
+  { id: 3, user: 'Mike Johnson', action: 'commented on post', time: '25 minutes ago', avatar: 'MJ' },
+  { id: 4, user: 'Sarah Williams', action: 'joined the platform', time: '1 hour ago', avatar: 'SW' },
+];
+
+const chartData = [
+  { name: 'Jan', value: 4000 },
+  { name: 'Feb', value: 3000 },
+  { name: 'Mar', value: 5000 },
+  { name: 'Apr', value: 2780 },
+  { name: 'May', value: 1890 },
+  { name: 'Jun', value: 2390 },
+  { name: 'Jul', value: 3490 },
+];
 
 const DashboardPage = () => {
-	const { user, logout } = useAuthStore();
-	const navigate = useNavigate();
+  const { user } = useAuthStore();
 
-	const handleLogout = () => {
-		logout();
-	};
-	return (
-		<SidebarMenuLayout>
-			<motion.div
-				initial={{ opacity: 0, scale: 0.9 }}
-				animate={{ opacity: 1, scale: 1 }}
-				exit={{ opacity: 0, scale: 0.9 }}
-				transition={{ duration: 0.5 }}
-				className='max-w-md w-full mx-auto mt-10 p-8 bg-gray-900 bg-opacity-80 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl border border-gray-800'
-			>
-				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-600 text-transparent bg-clip-text'>
-					Dashboard
-				</h2>
+  return (
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name || 'User'}! 👋</h1>
+        <p className="text-gray-500 mt-1">Here's what's happening with your dashboard today.</p>
+      </div>
 
-				<div className='space-y-6'>
-					<motion.div
-						className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.2 }}
-					>
-						<h3 className='text-xl font-semibold text-green-400 mb-3'>Profile Information</h3>
-						<p className='text-gray-300'>Name: {user.name}</p>
-						<p className='text-gray-300'>Email: {user.email}</p>
-					</motion.div>
-					<motion.div
-						className='p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700'
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.4 }}
-					>
-						<h3 className='text-xl font-semibold text-green-400 mb-3'>Account Activity</h3>
-						<p className='text-gray-300'>
-							<span className='font-bold'>Joined: </span>
-							{new Date(user.createdAt).toLocaleDateString("en-US", {
-								year: "numeric",
-								month: "long",
-								day: "numeric",
-							})}
-						</p>
-						<p className='text-gray-300'>
-							<span className='font-bold'>Last Login: </span>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <motion.div
+            key={stat.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-white rounded-lg shadow p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">{stat.name}</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">{stat.value}</p>
+                <div className={`flex items-center mt-2 text-sm ${
+                  stat.changeType === 'increase' ? 'text-green-600' : 
+                  stat.changeType === 'decrease' ? 'text-red-600' : 'text-gray-500'
+                }`}>
+                  {stat.changeType === 'increase' ? (
+                    <ArrowUp className="w-4 h-4 mr-1" />
+                  ) : stat.changeType === 'decrease' ? (
+                    <ArrowDown className="w-4 h-4 mr-1" />
+                  ) : (
+                    <Clock className="w-4 h-4 mr-1" />
+                  )}
+                  <span>{stat.change}</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-lg bg-blue-50 text-blue-600">
+                <stat.icon className="w-6 h-6" />
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-							{formatDate(user.lastLogin)}
-						</p>
-					</motion.div>
-				</div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-2 bg-white rounded-lg shadow p-6"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-gray-900">Activity Overview</h2>
+            <select className="text-sm border border-gray-200 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option>Last 7 days</option>
+              <option>Last 30 days</option>
+              <option>Last 90 days</option>
+            </select>
+          </div>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                <YAxis axisLine={false} tickLine={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
 
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.6 }}
-					className='mt-4'
-				>
-					<motion.button
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
-						onClick={() => navigate('/change-password')}
-						className='w-full py-3 px-4 mb-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white 
-					font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700
-					 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900'
-					>
-						Change Password
-					</motion.button>
-					<motion.button
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
-						onClick={handleLogout}
-						className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-					font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-					 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900'
-					>
-						Logout
-					</motion.button>
-				</motion.div>
-		</motion.div>
-	</SidebarMenuLayout>
+        {/* Recent Activity */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white rounded-lg shadow overflow-hidden"
+        >
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {recentActivity.map((activity) => (
+              <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium">
+                    {activity.avatar}
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-900">
+                      {activity.user} <span className="text-gray-500 font-normal">{activity.action}</span>
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">{activity.time}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="p-4 border-t border-gray-200 text-center">
+            <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
+              View all activity
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 };
 
