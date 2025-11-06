@@ -11,6 +11,13 @@ import ChangePasswordPage from "./pages/ChangePasswordPage";
 import AppLayout from "./components/AppLayout";
 import LoadingSpinner from "./components/LoadingSpinner";
 
+// Import the new page components
+import UsersPage from "./pages/users";
+import PostsPage from "./pages/posts";
+import MessagesPage from "./pages/messages";
+import CalendarPage from "./pages/calendar";
+import AnalyticsPage from "./pages/analytics";
+
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
@@ -112,7 +119,16 @@ function App() {
           </ProtectedRoute>
         }>
           <Route index element={<DashboardPage />} />
-          <Route path='/change-password' element={<ChangePasswordPage />} />
+          <Route path='dashboard' element={<DashboardPage />} />
+          <Route path='users' element={<UsersPage />}>
+            <Route path=':id' element={<UsersPage />} />
+          </Route>
+          <Route path='posts' element={<PostsPage />} />
+          <Route path='messages' element={<MessagesPage />} />
+          <Route path='calendar' element={<CalendarPage />} />
+          <Route path='analytics' element={<AnalyticsPage />} />
+          <Route path='settings' element={<ChangePasswordPage />} />
+          <Route path='change-password' element={<ChangePasswordPage />} />
         </Route>
         
         <Route path='*' element={<Navigate to='/' replace />} />
