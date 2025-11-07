@@ -4,8 +4,14 @@ import crypto from 'crypto';
 // Initialize with default values that will be replaced by environment variables
 let googleClient;
 let redirectUri;
+let isInitialized = false;
 
 const initializeGoogleClient = () => {
+    // Return cached client if already initialized
+    if (isInitialized && googleClient) {
+        return googleClient;
+    }
+    
     console.log('Initializing Google OAuth client...');
     console.log('GOOGLE_CLIENT_ID exists:', !!process.env.GOOGLE_CLIENT_ID);
     console.log('GOOGLE_CLIENT_SECRET exists:', !!process.env.GOOGLE_CLIENT_SECRET);
@@ -47,6 +53,7 @@ const initializeGoogleClient = () => {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             redirectUri: redirectUri
         });
+        isInitialized = true;
         console.log('Google OAuth client initialized successfully');
         return googleClient;
     } catch (error) {
@@ -57,8 +64,8 @@ const initializeGoogleClient = () => {
 
 export const getGoogleAuthURL = () => {
     try {
-        // Initialize client if not already done
-        if (!googleClient) {
+        // Initialize client if not already done (uses cache)
+        if (!isInitialized || !googleClient) {
             googleClient = initializeGoogleClient();
         }
 
@@ -91,8 +98,8 @@ export const getGoogleAuthURL = () => {
 
 export const getGoogleUser = async (code) => {
     try {
-        // Initialize client if not already done
-        if (!googleClient) {
+        // Initialize client if not already done (uses cache)
+        if (!isInitialized || !googleClient) {
             googleClient = initializeGoogleClient();
         }
 
