@@ -3,6 +3,7 @@ import axios from "axios";
 
 const API_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api/auth" : "/api/auth";
 
+// Configure axios to send credentials with all requests
 axios.defaults.withCredentials = true;
 
 export const useAuthStore = create((set) => ({
@@ -48,6 +49,30 @@ export const useAuthStore = create((set) => ({
 			set({ error: "Error logging out", isLoading: false });
 			throw error;
 		}
+	},
+
+	// Google OAuth
+	loginWithGoogle: async () => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.get(`${API_URL}/google/url`);
+			if (response.data.url) {
+				window.location.href = response.data.url;
+			}
+		} catch (error) {
+			set({ error: error.response?.data?.message || "Error initiating Google login", isLoading: false });
+			throw error;
+		}
+	},
+
+	// Helper to set user after OAuth redirect
+	setUser: (userData) => {
+		set({ 
+			user: userData, 
+			isAuthenticated: true, 
+			isLoading: false, 
+			error: null 
+		});
 	},
 	verifyEmail: async (code) => {
 		set({ isLoading: true, error: null });

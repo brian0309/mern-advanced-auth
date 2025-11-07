@@ -4,12 +4,12 @@ const userSchema = new mongoose.Schema(
 	{
 		email: {
 			type: String,
-			required: true,
+			required: function() { return !this.googleId; },
 			unique: true,
 		},
 		password: {
 			type: String,
-			required: true,
+			required: function() { return !this.googleId; },
 		},
 		name: {
 			type: String,
@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema(
 		resetPasswordExpiresAt: Date,
 		verificationToken: String,
 		verificationTokenExpiresAt: Date,
+		// Google OAuth fields
+		googleId: {
+			type: String,
+			unique: true,
+			sparse: true
+		},
+		profilePicture: String,
 	},
 	{ timestamps: true }
 );

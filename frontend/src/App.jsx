@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import OAuthRedirect from "./pages/OAuthRedirect";
 import AppLayout from "./components/AppLayout";
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -94,6 +95,14 @@ function App() {
                 <EmailVerificationPage />
               </RedirectAuthenticatedUser>
             } 
+          />
+          <Route
+            path="/oauth-redirect"
+            element={
+              <RedirectAuthenticatedUser>
+                <OAuthRedirect />
+              </RedirectAuthenticatedUser>
+            }
           />
           <Route
             path='/forgot-password'

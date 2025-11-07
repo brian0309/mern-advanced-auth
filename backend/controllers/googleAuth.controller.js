@@ -1,0 +1,115 @@
+import { getGoogleAuthURL, getGoogleUser } from "../config/googleAuth.js";
+import { User } from "../models/user.model.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+
+export const getGoogleAuthUrl = (req, res) => {
+    try {
+        const { url, state } = getGoogleAuthURL();
+        
+        // Store state in httpOnly cookie for CSRF protection
+        res.cookie('oauth_state', state, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 10 * 60 * 1000, // 10 minutes
+            path: '/', // Ensure cookie is available for all paths
+        });
+        
+        console.log('Setting oauth_state cookie:', state);
+        
+        res.status(200).json({ url });
+    } catch (error) {
+        console.error('Error generating Google URL:', error);
+        res.status(500).json({ success: false, message: 'Error generating Google URL' });
+    }
+};
+
+export const googleAuthCallback = async (req, res) => {
+    try {
+        const { code, state } = req.query;
+        const storedState = req.cookies.oauth_state;
+        
+        console.log('OAuth callback - All cookies:', req.cookies);
+        console.log('OAuth callback - State from query:', state);
+        console.log('OAuth callback - State from cookie:', storedState);
+        
+        // Verify CSRF state parameter
+        if (!state || !storedState || state !== storedState) {
+            console.error('CSRF state mismatch:', { 
+                received: state, 
+                stored: storedState,
+                allCookies: req.cookies 
+            });
+            const redirectUrl = `${process.env.CLIENT_URL}/login?error=invalid_state`;
+            return res.redirect(redirectUrl);
+        }
+        
+        // Clear the state cookie after verification
+        res.clearCookie('oauth_state');
+        
+        if (!code) {
+            return res.status(400).json({ success: false, message: 'Authorization code not provided' });
+        }
+
+        // Get the user's profile with the code
+        const googleUser = await getGoogleUser(code);
+        
+        // Check if user already exists with Google ID
+        let user = await User.findOne({ googleId: googleUser.id });
+
+        if (!user) {
+            // Check if user with this email already exists (password-based account)
+            user = await User.findOne({ email: googleUser.email });
+            
+            if (user) {
+                // Link Google account to existing email/password account
+                user.googleId = googleUser.id;
+                user.isVerified = true; // Google emails are verified
+                if (!user.profilePicture && googleUser.picture) {
+                    user.profilePicture = googleUser.picture;
+                }
+                await user.save();
+            } else {
+                // Create new user with Google OAuth (no password required)
+                user = new User({
+                    googleId: googleUser.id,
+                    email: googleUser.email,
+                    name: googleUser.name,
+                    profilePicture: googleUser.picture,
+                    isVerified: true,
+                    // Note: password is not required for Google OAuth users
+                });
+                await user.save();
+            }
+        }
+
+        // Update last login
+        user.lastLogin = new Date();
+        await user.save();
+
+        // Generate JWT token and set cookie
+        generateTokenAndSetCookie(res, user._id);
+
+        // Redirect to frontend with user data
+        const userData = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            profilePicture: user.profilePicture,
+            isVerified: user.isVerified
+        };
+
+        // Redirect to frontend with user data
+        const redirectUrl = `${process.env.CLIENT_URL}/oauth-redirect?${new URLSearchParams({
+            success: true,
+            user: JSON.stringify(userData)
+        })}`;
+
+        res.redirect(redirectUrl);
+
+    } catch (error) {
+        console.error('Error in Google OAuth callback:', error);
+        const redirectUrl = `${process.env.CLIENT_URL}/login?error=google_auth_failed`;
+        res.redirect(redirectUrl);
+    }
+};

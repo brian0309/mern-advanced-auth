@@ -2,17 +2,21 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
-
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { connectDB } from "./db/connectDB.js";
+
+// Get the directory name in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from root .env file
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import authRoutes from "./routes/auth.route.js";
 
-dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve();
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
