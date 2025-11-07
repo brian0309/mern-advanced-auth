@@ -7,7 +7,7 @@ import EmailVerificationPage from "./pages/EmailVerificationPage";
 import DashboardPage from "./pages/DashboardPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import ChangePasswordPage from "./pages/ChangePasswordPage";
+import SettingsPage from "./pages/SettingsPage";
 import OAuthRedirect from "./pages/OAuthRedirect";
 import AppLayout from "./components/AppLayout";
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -136,8 +136,7 @@ function App() {
           <Route path='messages' element={<MessagesPage />} />
           <Route path='calendar' element={<CalendarPage />} />
           <Route path='analytics' element={<AnalyticsPage />} />
-          <Route path='settings' element={<ChangePasswordPage />} />
-          <Route path='change-password' element={<ChangePasswordPage />} />
+          <Route path='settings' element={<SettingsPage />} />
         </Route>
         
         <Route path='*' element={<Navigate to='/' replace />} />

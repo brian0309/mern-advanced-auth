@@ -1,59 +1,323 @@
-<h1 align="center">Advanced Auth Tutorial 🔒 </h1>
+<h1 align="center">Advanced MERN Auth Application 🔒 </h1>
 
 ![Demo App](/frontend/public/screenshot-for-readme.png)
 
-[Video Tutorial on Youtube](https://youtu.be/pmvEgZC55Cg)
+A full-stack authentication system built with the MERN stack (MongoDB, Express, React, Node.js) featuring advanced authentication methods including email/password and Google OAuth, complete with email verification, password reset, and a modern dashboard UI.
 
-About This Course:
+## 🌟 Features Implemented
 
--   🔧 Backend Setup
--   🗄️ Database Setup
--   🔐 Signup Endpoint
--   📧 Sending Verify Account Email
--   🔍 Verify Email Endpoint
--   📄 Building a Welcome Email Template
--   🚪 Logout Endpoint
--   🔑 Login Endpoint
--   🔄 Forgot Password Endpoint
--   🔁 Reset Password Endpoint
--   ✔️ Check Auth Endpoint
--   🌐 Frontend Setup
--   📋 Signup Page UI
--   🔓 Login Page UI
--   ✅ Email Verification Page UI
--   📤 Implementing Signup
--   📧 Implementing Email Verification
--   🔒 Protecting Our Routes
--   🔑 Implementing Login
--   🏠 Dashboard Page
--   🔄 Implementing Forgot Password
--   🚀 Super Detailed Deployment
--   ✅ This is a lot of work. Support my work by subscribing to the [Channel](https://www.youtube.com/@asaprogrammer_)
+### Backend Features
 
-### Setup .env file
+-   🔧 **Backend Setup** - Express.js server with MongoDB integration
+-   🗄️ **Database Setup** - MongoDB with Mongoose ODM
+-   🔐 **Signup Endpoint** - User registration with password hashing
+-   📧 **Email Verification System** - Mailtrap integration for email verification
+-   🔍 **Verify Email Endpoint** - Token-based email verification
+-   📄 **Welcome Email Template** - Professional HTML email templates
+-   🚪 **Logout Endpoint** - Secure session termination
+-   🔑 **Login Endpoint** - JWT-based authentication
+-   🔄 **Forgot Password Flow** - Password reset via email
+-   🔁 **Reset Password Endpoint** - Secure password reset with tokens
+-   ✔️ **Check Auth Endpoint** - Protected route middleware
+-   🔒 **Change Password Endpoint** - Update password for logged-in users
+-   � **Google OAuth 2.0 Integration** - Sign in with Google
+-   🛡️ **CSRF Protection** - State parameter validation for OAuth
+-   � **Account Linking** - Link Google account to existing email/password account
+-   🍪 **HTTP-Only Cookies** - Secure token storage
+
+### Frontend Features
+
+-   🌐 **React + Vite Setup** - Fast development environment
+-   🎨 **Tailwind CSS** - Modern, responsive UI design
+-   ✨ **Framer Motion** - Smooth animations and transitions
+-   � **Signup Page UI** - Clean registration interface
+-   🔓 **Login Page UI** - User-friendly login form
+-   � **Google Login Button** - One-click Google authentication
+-   ✅ **Email Verification Page** - OTP-style verification code input
+-   � **Password Strength Meter** - Real-time password strength indicator
+-   � **Protected Routes** - Client-side route protection
+-   🏠 **Dashboard Page** - Feature-rich user dashboard with:
+    -   � Analytics section
+    -   📅 Calendar integration
+    -   👥 Users management
+    -   📝 Posts management
+    -   💬 Messages section
+-   ⚙️ **Settings Page** - Comprehensive user settings with tabs:
+    -   General settings (profile, language, timezone)
+    -   Security settings (password change)
+    -   Additional sections (billing, notifications, apps, etc.)
+-   🔐 **Change Password Page** - Dedicated password update interface
+-   🔄 **OAuth Redirect Handler** - Seamless Google OAuth callback handling
+-   📱 **Responsive Design** - Mobile-friendly interface
+-   🎯 **State Management** - Zustand for global state
+-   🔔 **Toast Notifications** - User feedback with react-hot-toast
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+-   Node.js (v14 or higher)
+-   MongoDB (local or Atlas)
+-   Google Cloud Console account (for OAuth)
+-   Mailtrap account (for email testing)
+
+### Setup Environment Variables
+
+Create a `.env` file in the root directory:
 
 ```bash
+# MongoDB
 MONGO_URI=your_mongo_uri
+
+# Server
 PORT=5000
-JWT_SECRET=your_secret_key
 NODE_ENV=development
 
+# JWT
+JWT_SECRET=your_secret_key
+
+# Mailtrap (Email Service)
 MAILTRAP_TOKEN=your_mailtrap_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 
-CLIENT_URL= http://localhost:5173
+# Google OAuth 2.0
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Frontend URL
+CLIENT_URL=http://localhost:5173
 ```
 
-### Run this app locally
+### Google OAuth Setup (Step-by-Step)
 
-```shell
-npm run build
+1. **Go to Google Cloud Console**
+   - Visit [Google Cloud Console](https://console.cloud.google.com/)
+   - Sign in with your Google account
+
+2. **Create a New Project**
+   - Click on the project dropdown at the top
+   - Click "New Project"
+   - Enter project name (e.g., "MERN Auth App")
+   - Click "Create"
+
+3. **Enable Google+ API**
+   - In the search bar, type "Google+ API"
+   - Click on "Google+ API"
+   - Click "Enable"
+
+4. **Configure OAuth Consent Screen**
+   - Go to "APIs & Services" > "OAuth consent screen"
+   - Select "External" user type
+   - Click "Create"
+   - Fill in the required fields:
+     - App name: Your app name
+     - User support email: Your email
+     - Developer contact: Your email
+   - Click "Save and Continue"
+   - Skip the Scopes section (click "Save and Continue")
+   - Add test users if needed
+   - Click "Save and Continue"
+
+5. **Create OAuth 2.0 Credentials**
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth client ID"
+   - Select "Web application"
+   - Name: "MERN Auth Web Client"
+   - Authorized JavaScript origins:
+     - `http://localhost:5173` (frontend URL)
+     - `http://localhost:5000` (backend URL)
+   - Authorized redirect URIs:
+     - `http://localhost:5000/api/auth/google/callback`
+   - Click "Create"
+
+6. **Copy Credentials**
+   - Copy the Client ID and Client Secret
+   - Paste them into your `.env` file:
+     ```
+     GOOGLE_CLIENT_ID=your_client_id_here
+     GOOGLE_CLIENT_SECRET=your_client_secret_here
+     ```
+
+7. **Update for Production**
+   - When deploying, add your production URLs to:
+     - Authorized JavaScript origins
+     - Authorized redirect URIs
+   - Update `.env` with production URLs
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd mern-advanced-auth
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm run build
+   ```
+   This will install both backend and frontend dependencies.
+
+### Running the Application
+
+**Development Mode:**
+```bash
+npm run dev
 ```
+This starts the backend server with nodemon for hot-reloading.
 
-### Start the app
-
-```shell
+**Production Mode:**
+```bash
 npm run start
 ```
 
-### I'll see you in the next one! 🚀
+**Frontend (separate terminal):**
+```bash
+cd frontend
+npm run dev
+```
+
+The application will be available at:
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:5000`
+
+## 📁 Project Structure
+
+```
+mern-advanced-auth/
+├── backend/
+│   ├── config/
+│   │   └── googleAuth.js          # Google OAuth configuration
+│   ├── controllers/
+│   │   ├── auth.controller.js     # Auth endpoints
+│   │   └── googleAuth.controller.js # Google OAuth endpoints
+│   ├── db/
+│   │   └── connectDB.js           # MongoDB connection
+│   ├── mailtrap/
+│   │   ├── emails.js              # Email sending functions
+│   │   ├── emailTemplates.js      # HTML email templates
+│   │   └── mailtrap.config.js     # Mailtrap configuration
+│   ├── middleware/
+│   │   └── verifyToken.js         # JWT verification middleware
+│   ├── models/
+│   │   └── user.model.js          # User schema
+│   ├── routes/
+│   │   └── auth.route.js          # Auth routes
+│   └── utils/
+│       └── generateTokenAndSetCookie.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── GoogleLoginButton.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── PasswordStrengthMeter.jsx
+│   │   │   └── ...
+│   │   ├── pages/
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── SignUpPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── SettingsPage.jsx
+│   │   │   ├── ChangePasswordPage.jsx
+│   │   │   ├── OAuthRedirect.jsx
+│   │   │   └── ...
+│   │   ├── store/
+│   │   │   └── authStore.js       # Zustand state management
+│   │   └── App.jsx
+│   └── ...
+└── package.json
+```
+
+## 🔑 Key API Endpoints
+
+### Authentication
+- `POST /api/auth/signup` - Register new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/logout` - Logout user
+- `GET /api/auth/check-auth` - Verify authentication
+- `POST /api/auth/verify-email` - Verify email with code
+- `POST /api/auth/forgot-password` - Request password reset
+- `POST /api/auth/reset-password/:token` - Reset password
+- `POST /api/auth/change-password` - Change password (protected)
+
+### Google OAuth
+- `GET /api/auth/google/url` - Get Google OAuth URL
+- `GET /api/auth/google/callback` - Handle Google OAuth callback
+
+## 🛠️ Technologies Used
+
+### Backend
+- **Express.js** - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM
+- **JWT** - Authentication tokens
+- **bcryptjs** - Password hashing
+- **Mailtrap** - Email service
+- **google-auth-library** - Google OAuth
+- **cookie-parser** - Cookie handling
+- **cors** - Cross-origin resource sharing
+
+### Frontend
+- **React** - UI library
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **React Router** - Routing
+- **Zustand** - State management
+- **React Hot Toast** - Notifications
+- **Lucide React** - Icons
+
+## 🔐 Security Features
+
+- ✅ Password hashing with bcrypt
+- ✅ JWT tokens stored in HTTP-only cookies
+- ✅ CSRF protection for OAuth
+- ✅ Email verification required
+- ✅ Secure password reset flow
+- ✅ Token expiration handling
+- ✅ Protected API routes
+- ✅ Input validation
+- ✅ Google OAuth 2.0 with state parameter
+
+## 📝 Additional Notes
+
+- **OAuth Account Linking**: If a user signs up with email/password and later uses Google OAuth with the same email, the accounts are automatically linked.
+- **Email Verification**: Google OAuth users are automatically verified since Google verifies email addresses.
+- **Password Strength**: The app includes a real-time password strength meter for better security.
+- **Responsive Design**: The entire application is mobile-friendly and works on all screen sizes.
+
+## 🚀 Deployment
+
+For production deployment:
+1. Update environment variables with production values
+2. Add production URLs to Google OAuth credentials
+3. Use a production-ready database (MongoDB Atlas)
+4. Set `NODE_ENV=production`
+5. Configure CORS for your production domain
+6. Use a real email service (replace Mailtrap)
+
+## 📚 Learning Resources
+
+This project covers:
+- Full-stack MERN development
+- JWT authentication
+- OAuth 2.0 implementation
+- Email verification systems
+- Password reset flows
+- Modern React patterns
+- State management with Zustand
+- Tailwind CSS styling
+- API design and security
+
+## 🤝 Contributing
+
+Feel free to fork this project and submit pull requests for any improvements.
+
+## 📄 License
+
+ISC
+
+---
+
+**Happy Coding! 🚀**
