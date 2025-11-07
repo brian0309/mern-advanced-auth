@@ -59,10 +59,11 @@ export const signup = async (req, res) => {
 export const verifyEmail = async (req, res) => {
 	const { code } = req.body;
 	try {
+		// Only fetch necessary fields for email verification
 		const user = await User.findOne({
 			verificationToken: code,
 			verificationTokenExpiresAt: { $gt: Date.now() },
-		});
+		}).select('_id email name isVerified verificationToken verificationTokenExpiresAt');
 
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid or expired verification code" });
@@ -92,6 +93,7 @@ export const verifyEmail = async (req, res) => {
 export const login = async (req, res) => {
 	const { email, password } = req.body;
 	try {
+		// Fetch full user document - need password for bcrypt comparison and most fields for response
 		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid credentials" });
@@ -103,6 +105,7 @@ export const login = async (req, res) => {
 
 		generateTokenAndSetCookie(res, user._id);
 
+		// Update last login without triggering additional queries
 		user.lastLogin = new Date();
 		await user.save();
 
@@ -128,7 +131,8 @@ export const logout = async (req, res) => {
 export const forgotPassword = async (req, res) => {
 	const { email } = req.body;
 	try {
-		const user = await User.findOne({ email });
+		// Only select necessary fields for password reset
+		const user = await User.findOne({ email }).select('_id email resetPasswordToken resetPasswordExpiresAt');
 
 		if (!user) {
 			return res.status(400).json({ success: false, message: "User not found" });
@@ -158,10 +162,11 @@ export const resetPassword = async (req, res) => {
 		const { token } = req.params;
 		const { password } = req.body;
 
+		// Only fetch necessary fields for password reset
 		const user = await User.findOne({
 			resetPasswordToken: token,
 			resetPasswordExpiresAt: { $gt: Date.now() },
-		});
+		}).select('_id email password resetPasswordToken resetPasswordExpiresAt');
 
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
@@ -201,7 +206,8 @@ export const checkAuth = async (req, res) => {
 export const changePassword = async (req, res) => {
 	const { currentPassword, newPassword } = req.body;
 	try {
-		const user = await User.findById(req.userId);
+		// Only fetch necessary fields for password change
+		const user = await User.findById(req.userId).select('_id password');
 		if (!user) {
 			return res.status(400).json({ success: false, message: "User not found" });
 		}

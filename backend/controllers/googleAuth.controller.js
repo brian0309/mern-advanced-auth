@@ -54,37 +54,47 @@ export const googleAuthCallback = async (req, res) => {
         // Get the user's profile with the code
         const googleUser = await getGoogleUser(code);
         
-        // Check if user already exists with Google ID
-        let user = await User.findOne({ googleId: googleUser.id });
+        // Check if user already exists with Google ID or email in a single query
+        let user = await User.findOne({ 
+            $or: [
+                { googleId: googleUser.id },
+                { email: googleUser.email }
+            ]
+        });
 
         if (!user) {
-            // Check if user with this email already exists (password-based account)
-            user = await User.findOne({ email: googleUser.email });
+            // Create new user with Google OAuth (no password required)
+            user = new User({
+                googleId: googleUser.id,
+                email: googleUser.email,
+                name: googleUser.name,
+                profilePicture: googleUser.picture,
+                isVerified: true,
+                lastLogin: new Date(),
+                // Note: password is not required for Google OAuth users
+            });
+        } else {
+            // Update existing user - consolidate all updates into single operation
+            const updates = {
+                lastLogin: new Date(),
+                isVerified: true, // Google emails are verified
+            };
             
-            if (user) {
-                // Link Google account to existing email/password account
-                user.googleId = googleUser.id;
-                user.isVerified = true; // Google emails are verified
-                if (!user.profilePicture && googleUser.picture) {
-                    user.profilePicture = googleUser.picture;
-                }
-                await user.save();
-            } else {
-                // Create new user with Google OAuth (no password required)
-                user = new User({
-                    googleId: googleUser.id,
-                    email: googleUser.email,
-                    name: googleUser.name,
-                    profilePicture: googleUser.picture,
-                    isVerified: true,
-                    // Note: password is not required for Google OAuth users
-                });
-                await user.save();
+            // Link Google account if not already linked
+            if (!user.googleId) {
+                updates.googleId = googleUser.id;
             }
+            
+            // Update profile picture if not set
+            if (!user.profilePicture && googleUser.picture) {
+                updates.profilePicture = googleUser.picture;
+            }
+            
+            // Apply all updates at once
+            Object.assign(user, updates);
         }
-
-        // Update last login
-        user.lastLogin = new Date();
+        
+        // Single save operation instead of multiple
         await user.save();
 
         // Generate JWT token and set cookie
