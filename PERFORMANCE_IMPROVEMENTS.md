@@ -4,25 +4,24 @@ This document outlines the performance optimizations implemented in the MERN Adv
 
 ## Summary of Changes
 
+
 ### 1. Database Indexing (User Model)
 **File:** `backend/models/user.model.js`
 
 **Problem:** Without indexes, MongoDB performs collection scans for queries on email, googleId, and token fields, which is inefficient as the user base grows.
 
-**Solution:** Added strategic indexes on frequently queried fields:
+**Solution:**
+- The `unique: true` property on the `email` and `googleId` fields in the schema automatically creates unique indexes for those fields. There is no need to add explicit single-field indexes for them.
+- Compound indexes are still defined explicitly for queries involving multiple fields:
 
 ```javascript
-// Single field indexes
-userSchema.index({ email: 1 });     // For login and signup lookups
-userSchema.index({ googleId: 1 });  // For Google OAuth lookups
-
 // Compound indexes for queries with multiple conditions
 userSchema.index({ verificationToken: 1, verificationTokenExpiresAt: 1 });
 userSchema.index({ resetPasswordToken: 1, resetPasswordExpiresAt: 1 });
 ```
 
 **Impact:**
-- Email lookups: O(log n) instead of O(n) time complexity
+- Email and Google ID lookups: O(log n) instead of O(n) time complexity
 - Faster authentication queries by 10-100x for large datasets
 - Improved OAuth login performance
 - Efficient token validation queries with expiry checks
