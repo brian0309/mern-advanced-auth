@@ -4,14 +4,21 @@
 	"description": "",
 	"main": "backend/index.js",
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon backend/index.js",
+		"dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only backend/index.js",
 		"start": "cross-env NODE_ENV=production node backend/index.js",
-		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+		"build": "npm install && tsc -p backend/tsconfig.json && npm install --prefix frontend && npm run build --prefix frontend",
+		"build:backend": "tsc -p backend/tsconfig.json",
+		"type-check": "tsc -p backend/tsconfig.json --noEmit",
+		"type-check:watch": "tsc -p backend/tsconfig.json --noEmit --watch"
 	},
 	"keywords": [],
 	"author": "",
 	"type": "module",
 	"license": "ISC",
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node"
+	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
 		"cookie-parser": "^1.4.6",
@@ -27,7 +34,18 @@
 		"passport-google-oauth20": "^2.0.0"
 	},
 	"devDependencies": {
+		"@types/bcryptjs": "^2.4.6",
+		"@types/cookie-parser": "^1.4.10",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.5",
+		"@types/jsonwebtoken": "^9.0.10",
+		"@types/node": "^24.10.0",
+		"@types/passport": "^1.0.17",
+		"@types/passport-google-oauth20": "^2.0.17",
 		"cross-env": "^7.0.3",
-		"nodemon": "^3.1.4"
+		"nodemon": "^3.1.4",
+		"ts-node": "^10.9.2",
+		"ts-node-dev": "^2.0.0",
+		"typescript": "^5.9.3"
 	}
 }
