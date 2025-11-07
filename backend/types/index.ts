@@ -1,6 +1,7 @@
 /**
  * Central export file for all backend TypeScript types
- * Import types from here in other files: import { IUser, LoginDTO } from '../types/index.js';
+ * Import types from here: import type { IUser, LoginDTO } from '../types/index.js';
+ * Note: .js extension is required for ES modules in Node.js (TypeScript will resolve .ts files)
  */
 
 // User types

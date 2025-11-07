@@ -24,7 +24,7 @@ export interface IUser {
  * User document interface extending Mongoose Document
  * Used for MongoDB operations
  */
-export interface IUserDocument extends Document, Omit<IUser, '_id'> {
+export interface IUserDocument extends Omit<IUser, '_id'>, Document {
   _id: string;
 }
 
