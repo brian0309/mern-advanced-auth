@@ -93,7 +93,7 @@ export const verifyEmail = async (req, res) => {
 export const login = async (req, res) => {
 	const { email, password } = req.body;
 	try {
-		// Only select the fields we need for authentication
+		// Fetch full user document - need password for bcrypt comparison and most fields for response
 		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid credentials" });

@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // Indexes for performance optimization
+// Note: email already has a unique index from schema definition, but we keep it explicit for clarity
 userSchema.index({ email: 1 }); // For login and signup lookups
 userSchema.index({ googleId: 1 }); // For Google OAuth lookups
 userSchema.index({ verificationToken: 1, verificationTokenExpiresAt: 1 }); // For email verification with expiry check
