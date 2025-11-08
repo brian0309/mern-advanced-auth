@@ -1,8 +1,9 @@
-import { getGoogleAuthURL, getGoogleUser } from "../config/googleAuth.ts";
-import { User } from "../models/user.model.ts";
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.ts";
+import { Request, Response } from "express";
+import { getGoogleAuthURL, getGoogleUser } from "../config/googleAuth.js";
+import { User } from "../models/user.model.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
-export const getGoogleAuthUrl = (req, res) => {
+export const getGoogleAuthUrl = (req: Request, res: Response): Response | void => {
     try {
         const { url, state } = getGoogleAuthURL();
         
@@ -24,7 +25,7 @@ export const getGoogleAuthUrl = (req, res) => {
     }
 };
 
-export const googleAuthCallback = async (req, res) => {
+export const googleAuthCallback = async (req: Request, res: Response): Promise<void> => {
     try {
         const { code, state } = req.query;
         const storedState = req.cookies.oauth_state;
@@ -41,14 +42,16 @@ export const googleAuthCallback = async (req, res) => {
                 allCookies: req.cookies 
             });
             const redirectUrl = `${process.env.CLIENT_URL}/login?error=invalid_state`;
-            return res.redirect(redirectUrl);
+            res.redirect(redirectUrl);
+            return;
         }
         
         // Clear the state cookie after verification
         res.clearCookie('oauth_state');
         
-        if (!code) {
-            return res.status(400).json({ success: false, message: 'Authorization code not provided' });
+        if (!code || typeof code !== 'string') {
+            res.redirect(`${process.env.CLIENT_URL}/login?error=no_code`);
+            return;
         }
 
         // Get the user's profile with the code
@@ -75,7 +78,12 @@ export const googleAuthCallback = async (req, res) => {
             });
         } else {
             // Update existing user - consolidate all updates into single operation
-            const updates = {
+            const updates: Partial<{
+                lastLogin: Date;
+                isVerified: boolean;
+                googleId: string;
+                profilePicture: string;
+            }> = {
                 lastLogin: new Date(),
                 isVerified: true, // Google emails are verified
             };
@@ -111,7 +119,7 @@ export const googleAuthCallback = async (req, res) => {
 
         // Redirect to frontend with user data
         const redirectUrl = `${process.env.CLIENT_URL}/oauth-redirect?${new URLSearchParams({
-            success: true,
+            success: 'true',
             user: JSON.stringify(userData)
         })}`;
 

@@ -1,16 +1,17 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
+import { Request, Response } from "express";
 
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.ts";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import {
 	sendPasswordResetEmail,
 	sendResetSuccessEmail,
 	sendVerificationEmail,
 	sendWelcomeEmail,
-} from "../mailtrap/emails.ts";
-import { User } from "../models/user.model.ts";
+} from "../mailtrap/emails.js";
+import { User } from "../models/user.model.js";
 
-export const signup = async (req, res) => {
+export const signup = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email, password, name } = req.body;
 
 	try {
@@ -47,16 +48,17 @@ export const signup = async (req, res) => {
 			success: true,
 			message: "User created successfully",
 			user: {
-				...user._doc,
+				...user.toObject(),
 				password: undefined,
 			},
 		});
 	} catch (error) {
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
 
-export const verifyEmail = async (req, res) => {
+export const verifyEmail = async (req: Request, res: Response): Promise<Response | void> => {
 	const { code } = req.body;
 	try {
 		// Only fetch necessary fields for email verification
@@ -80,7 +82,7 @@ export const verifyEmail = async (req, res) => {
 			success: true,
 			message: "Email verified successfully",
 			user: {
-				...user._doc,
+				...user.toObject(),
 				password: undefined,
 			},
 		});
@@ -90,13 +92,16 @@ export const verifyEmail = async (req, res) => {
 	}
 };
 
-export const login = async (req, res) => {
+export const login = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email, password } = req.body;
 	try {
 		// Fetch full user document - need password for bcrypt comparison and most fields for response
 		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid credentials" });
+		}
+		if (!user.password) {
+			return res.status(400).json({ success: false, message: "Please use Google OAuth to login" });
 		}
 		const isPasswordValid = await bcryptjs.compare(password, user.password);
 		if (!isPasswordValid) {
@@ -113,22 +118,23 @@ export const login = async (req, res) => {
 			success: true,
 			message: "Logged in successfully",
 			user: {
-				...user._doc,
+				...user.toObject(),
 				password: undefined,
 			},
 		});
 	} catch (error) {
 		console.log("Error in login ", error);
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
 
-export const logout = async (req, res) => {
+export const logout = async (req: Request, res: Response): Promise<Response> => {
 	res.clearCookie("token");
-	res.status(200).json({ success: true, message: "Logged out successfully" });
+	return res.status(200).json({ success: true, message: "Logged out successfully" });
 };
 
-export const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email } = req.body;
 	try {
 		// Only select necessary fields for password reset
@@ -140,7 +146,7 @@ export const forgotPassword = async (req, res) => {
 
 		// Generate reset token
 		const resetToken = crypto.randomBytes(20).toString("hex");
-		const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+		const resetTokenExpiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hour
 
 		user.resetPasswordToken = resetToken;
 		user.resetPasswordExpiresAt = resetTokenExpiresAt;
@@ -153,11 +159,12 @@ export const forgotPassword = async (req, res) => {
 		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
 	} catch (error) {
 		console.log("Error in forgotPassword ", error);
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req: Request, res: Response): Promise<Response | void> => {
 	try {
 		const { token } = req.params;
 		const { password } = req.body;
@@ -185,11 +192,12 @@ export const resetPassword = async (req, res) => {
 		res.status(200).json({ success: true, message: "Password reset successful" });
 	} catch (error) {
 		console.log("Error in resetPassword ", error);
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
 
-export const checkAuth = async (req, res) => {
+export const checkAuth = async (req: Request, res: Response): Promise<Response | void> => {
 	try {
 		const user = await User.findById(req.userId).select("-password");
 		if (!user) {
@@ -199,17 +207,21 @@ export const checkAuth = async (req, res) => {
 		res.status(200).json({ success: true, user });
 	} catch (error) {
 		console.log("Error in checkAuth ", error);
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
 
-export const changePassword = async (req, res) => {
+export const changePassword = async (req: Request, res: Response): Promise<Response | void> => {
 	const { currentPassword, newPassword } = req.body;
 	try {
 		// Only fetch necessary fields for password change
 		const user = await User.findById(req.userId).select('_id password');
 		if (!user) {
 			return res.status(400).json({ success: false, message: "User not found" });
+		}
+		if (!user.password) {
+			return res.status(400).json({ success: false, message: "Cannot change password for OAuth users" });
 		}
 
 		const isPasswordValid = await bcryptjs.compare(currentPassword, user.password);
@@ -224,6 +236,7 @@ export const changePassword = async (req, res) => {
 		res.status(200).json({ success: true, message: "Password changed successfully" });
 	} catch (error) {
 		console.log("Error in changePassword ", error);
-		res.status(400).json({ success: false, message: error.message });
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(400).json({ success: false, message: errorMessage });
 	}
 };
