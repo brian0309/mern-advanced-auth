@@ -135,12 +135,12 @@ A full-stack authentication system built with the MERN stack (MongoDB, Express, 
 Create a `.env` file in the root directory:
 
 ```bash
-# MongoDB
-MONGO_URI=your_mongo_uri
-
-# Server
+# Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# MongoDB Connection
+MONGO_URI=your_mongo_uri
 
 # JWT
 JWT_SECRET=your_secret_key
@@ -257,45 +257,89 @@ The application will be available at:
 mern-advanced-auth/
 ├── backend/
 │   ├── config/
-│   │   └── googleAuth.js          # Google OAuth configuration
+│   │   └── googleAuth.ts            # Google OAuth configuration
 │   ├── controllers/
-│   │   ├── auth.controller.js     # Auth endpoints
-│   │   └── googleAuth.controller.js # Google OAuth endpoints
+│   │   ├── auth.controller.ts       # Auth endpoints
+│   │   └── googleAuth.controller.ts # Google OAuth endpoints
 │   ├── db/
-│   │   └── connectDB.js           # MongoDB connection
+│   │   └── connectDB.ts             # MongoDB connection
 │   ├── mailtrap/
-│   │   ├── emails.js              # Email sending functions
-│   │   ├── emailTemplates.js      # HTML email templates
-│   │   └── mailtrap.config.js     # Mailtrap configuration
+│   │   ├── emails.ts                # Email sending functions
+│   │   ├── emailTemplates.ts        # HTML email templates
+│   │   └── mailtrap.config.ts       # Mailtrap configuration
 │   ├── middleware/
-│   │   └── verifyToken.js         # JWT verification middleware
+│   │   └── verifyToken.ts           # JWT verification middleware
 │   ├── models/
-│   │   └── user.model.js          # User schema
+│   │   └── user.model.ts            # User schema
 │   ├── routes/
-│   │   └── auth.route.js          # Auth routes
+│   │   └── auth.route.ts            # Auth routes
+│   ├── types/
+│   │   ├── api.types.ts
+│   │   ├── auth.types.ts
+│   │   ├── express.d.ts
+│   │   ├── index.ts
+│   │   └── user.types.ts
 │   └── utils/
-│       └── generateTokenAndSetCookie.js
+│       └── generateTokenAndSetCookie.ts
+│   └── index.ts                     # Backend entry point
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── GoogleLoginButton.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Input.jsx
-│   │   │   ├── PasswordStrengthMeter.jsx
-│   │   │   └── ...
+│   │   │   ├── AppLayout.tsx
+│   │   │   ├── FloatingShape.tsx
+│   │   │   ├── GoogleLoginButton.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   ├── PasswordStrengthMeter.tsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── SidebarMenuLayout.tsx
 │   │   ├── pages/
-│   │   │   ├── LoginPage.jsx
-│   │   │   ├── SignUpPage.jsx
-│   │   │   ├── DashboardPage.jsx
-│   │   │   ├── SettingsPage.jsx
-│   │   │   ├── ChangePasswordPage.jsx
-│   │   │   ├── OAuthRedirect.jsx
-│   │   │   └── ...
+│   │   │   ├── ChangePasswordPage.tsx
+│   │   │   ├── DashboardPage.tsx
+│   │   │   ├── EmailVerificationPage.tsx
+│   │   │   ├── ForgotPasswordPage.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── OAuthRedirect.tsx
+│   │   │   ├── ResetPasswordPage.tsx
+│   │   │   ├── SettingsPage.tsx
+│   │   │   ├── SignUpPage.tsx
+│   │   │   ├── analytics/
+│   │   │   │   └── index.tsx
+│   │   │   ├── calendar/
+│   │   │   │   └── index.tsx
+│   │   │   ├── messages/
+│   │   │   │   └── index.tsx
+│   │   │   ├── posts/
+│   │   │   │   └── index.tsx
+│   │   │   └── users/
+│   │   │       └── index.tsx
 │   │   ├── store/
-│   │   │   └── authStore.js       # Zustand state management
-│   │   └── App.jsx
-│   └── ...
-└── package.json
+│   │   │   └── authStore.ts         # Zustand state management
+│   │   ├── types/
+│   │   │   ├── api.types.ts
+│   │   │   ├── auth.types.ts
+│   │   │   ├── component.types.ts
+│   │   │   ├── index.ts
+│   │   │   ├── store.types.ts
+│   │   │   └── user.types.ts
+│   │   ├── utils/
+│   │   │   └── date.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   ├── index.css
+│   │   └── vite-env.d.ts
+│   ├── public/
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.js
+├── migrate-to-typescript.md
+├── package.json
+├── README.md
+└── ...
 ```
 
 ## 🔑 Key API Endpoints
