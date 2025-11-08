@@ -1,5 +1,5 @@
 import { getGoogleAuthURL, getGoogleUser } from "../config/googleAuth.ts";
-import { User } from "../models/user.model.js";
+import { User } from "../models/user.model.ts";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.ts";
 
 export const getGoogleAuthUrl = (req, res) => {
