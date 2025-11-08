@@ -31,6 +31,27 @@ const AppLayout: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Close sidebar with Escape on mobile and lock body scrolling when sidebar open
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobile && isSidebarOpen) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    if (isMobile && isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', onKey);
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [isMobile, isSidebarOpen]);
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -38,12 +59,31 @@ const AppLayout: React.FC = () => {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block`}>
-        <Sidebar 
-          isCollapsed={!isSidebarOpen && !isMobile} 
-          toggleSidebar={toggleSidebar} 
-        />
-      </div>
+      {/* Desktop: keep sidebar in layout flow. Mobile: render as fixed overlay so content doesn't shift. */}
+      {isMobile ? (
+        <>
+          <div className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 lg:hidden ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <Sidebar
+              isCollapsed={false}
+              toggleSidebar={toggleSidebar}
+            />
+          </div>
+
+          {/* Backdrop for mobile when sidebar is open */}
+          <div
+            className={`fixed inset-0 bg-black bg-opacity-40 z-40 transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            onClick={() => setIsSidebarOpen(false)}
+            aria-hidden={!isSidebarOpen}
+          />
+        </>
+      ) : (
+        <div className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block`}>
+          <Sidebar
+            isCollapsed={!isSidebarOpen && !isMobile}
+            toggleSidebar={toggleSidebar}
+          />
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
