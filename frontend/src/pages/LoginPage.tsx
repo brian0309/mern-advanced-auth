@@ -64,14 +64,11 @@ const LoginPage: React.FC = () => {
 						{isLoading ? <Loader className='w-6 h-6 animate-spin  mx-auto' /> : "Login"}
 					</motion.button>
 
-					<div className="relative my-6">
-						<div className="absolute inset-0 flex items-center">
-							<div className="w-full border-t border-gray-300"></div>
-						</div>
-						<div className="relative flex justify-center text-sm">
-							<span className="px-2 bg-background-paper text-text-secondary">Or continue with</span>
-						</div>
-					</div>
+													<div className="flex items-center my-6 w-full">
+														<div className="flex-grow border-t border-gray-300"></div>
+														<span className="px-2 text-text-secondary bg-background-paper z-10">Or continue with</span>
+														<div className="flex-grow border-t border-gray-300"></div>
+													</div>
 
 					<GoogleLoginButton />
 				</form>

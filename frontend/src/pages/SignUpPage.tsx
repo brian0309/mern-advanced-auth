@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { useAuthStore } from "../store/authStore";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 const SignUpPage: React.FC = () => {
 	const [name, setName] = useState<string>("");
@@ -62,26 +63,33 @@ const SignUpPage: React.FC = () => {
 					{error && <p className='text-error font-semibold mt-2'>{error}</p>}
 					<PasswordStrengthMeter password={password} />
 
-					<motion.button
-						className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-						font-bold rounded-lg shadow hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition duration-200'
-						whileHover={{ scale: 1.02 }}
-						whileTap={{ scale: 0.98 }}
-						type='submit'
-						disabled={isLoading}
-					>
-						{isLoading ? <Loader className=' animate-spin mx-auto' size={24} /> : "Sign Up"}
-					</motion.button>
-				</form>
-			</div>
-			<div className='px-8 py-4 bg-background-paper border-t border-gray-200 flex justify-center'>
-				<p className='text-sm text-text-secondary'>
-					Already have an account?{" "}
-					<Link to={"/login"} className='text-primary hover:underline'>
-						Login
-					</Link>
-				</p>
-			</div>
+										<motion.button
+											className="mt-5 w-full py-3 px-4 bg-primary text-text-contrast font-bold rounded-lg shadow hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition duration-200"
+											whileHover={{ scale: 1.02 }}
+											whileTap={{ scale: 0.98 }}
+											type="submit"
+											disabled={isLoading}
+										>
+											{isLoading ? <Loader className="w-6 h-6 animate-spin mx-auto" /> : "Sign Up"}
+										</motion.button>
+					</form>
+
+					{/* Divider and Google Login Button */}
+					<div className="flex items-center my-6 w-full">
+						<div className="flex-grow border-t border-gray-300"></div>
+						<span className="px-2 text-text-secondary bg-background-paper z-10">Or continue with</span>
+						<div className="flex-grow border-t border-gray-300"></div>
+					</div>
+					<GoogleLoginButton />
+				</div>
+				<div className='px-8 py-4 bg-background-paper border-t border-gray-200 flex justify-center'>
+					<p className='text-sm text-text-secondary'>
+						Already have an account?{" "}
+						<Link to={"/login"} className='text-primary hover:underline'>
+							Login
+						</Link>
+					</p>
+				</div>
 		</motion.div>
 	);
 };
