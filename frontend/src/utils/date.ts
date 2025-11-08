@@ -1,4 +1,4 @@
-export const formatDate = (dateString) => {
+export const formatDate = (dateString: string | Date): string => {
 	const date = new Date(dateString);
 	if (isNaN(date.getTime())) {
 		return "Invalid Date";
