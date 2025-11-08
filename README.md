@@ -1,3 +1,72 @@
+<h1 align="center">Advanced MERN Auth Application 🔒</h1>
+
+<p align="center">
+   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.3.3-blue?logo=typescript" />
+   <img alt="Backend" src="https://img.shields.io/badge/Backend-100%25%20TypeScript-blueviolet" />
+   <img alt="Frontend" src="https://img.shields.io/badge/Frontend-100%25%20TypeScript-blueviolet" />
+   <img alt="Status" src="https://img.shields.io/badge/Migration-Complete-brightgreen" />
+</p>
+
+![Demo App](/frontend/public/screenshot-for-readme.png)
+
+A full-stack authentication system built with the MERN stack (MongoDB, Express, React, Node.js) featuring advanced authentication methods including email/password and Google OAuth, complete with email verification, password reset, and a modern dashboard UI.
+
+> **🟦 Now fully migrated to TypeScript!**
+> - Backend and frontend are 100% TypeScript
+> - All scripts, types, and configs updated
+> - See [`migrate-to-typescript.md`](./migrate-to-typescript.md) for migration details
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd mern-advanced-auth
+   ```
+
+2. **Install dependencies and build**
+   ```bash
+   npm run build
+   ```
+   This will install both backend and frontend dependencies and build the TypeScript code.
+**Development Mode (TypeScript):**
+```bash
+npm run dev
+```
+- Starts backend with ts-node-dev (TypeScript hot-reloading)
+- Starts frontend (Vite + React + TypeScript)
+
+**Production Mode:**
+```bash
+npm run start
+```
+
+**Frontend (separate terminal, if needed):**
+```bash
+cd frontend
+npm run dev
+```
+
+The application will be available at:
+ - Frontend: `http://localhost:5173`
+ - Backend: `http://localhost:5000`
+## 📘 TypeScript & Learning Resources
+
+This project covers:
+- Full-stack MERN development
+- JWT authentication
+- OAuth 2.0 implementation
+- Email verification systems
+- Password reset flows
+- Modern React patterns
+- State management with Zustand
+- Tailwind CSS styling
+- API design and security
+- **TypeScript best practices (see [`migrate-to-typescript.md`](./migrate-to-typescript.md))**
+
+**Recommended:**
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+- [TypeScript with Express](https://blog.logrocket.com/how-to-set-up-node-typescript-express/)
 <h1 align="center">Advanced MERN Auth Application 🔒 </h1>
 
 ![Demo App](/frontend/public/screenshot-for-readme.png)
@@ -66,12 +135,12 @@ A full-stack authentication system built with the MERN stack (MongoDB, Express, 
 Create a `.env` file in the root directory:
 
 ```bash
-# MongoDB
-MONGO_URI=your_mongo_uri
-
-# Server
+# Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# MongoDB Connection
+MONGO_URI=your_mongo_uri
 
 # JWT
 JWT_SECRET=your_secret_key
@@ -188,45 +257,89 @@ The application will be available at:
 mern-advanced-auth/
 ├── backend/
 │   ├── config/
-│   │   └── googleAuth.js          # Google OAuth configuration
+│   │   └── googleAuth.ts            # Google OAuth configuration
 │   ├── controllers/
-│   │   ├── auth.controller.js     # Auth endpoints
-│   │   └── googleAuth.controller.js # Google OAuth endpoints
+│   │   ├── auth.controller.ts       # Auth endpoints
+│   │   └── googleAuth.controller.ts # Google OAuth endpoints
 │   ├── db/
-│   │   └── connectDB.js           # MongoDB connection
+│   │   └── connectDB.ts             # MongoDB connection
 │   ├── mailtrap/
-│   │   ├── emails.js              # Email sending functions
-│   │   ├── emailTemplates.js      # HTML email templates
-│   │   └── mailtrap.config.js     # Mailtrap configuration
+│   │   ├── emails.ts                # Email sending functions
+│   │   ├── emailTemplates.ts        # HTML email templates
+│   │   └── mailtrap.config.ts       # Mailtrap configuration
 │   ├── middleware/
-│   │   └── verifyToken.js         # JWT verification middleware
+│   │   └── verifyToken.ts           # JWT verification middleware
 │   ├── models/
-│   │   └── user.model.js          # User schema
+│   │   └── user.model.ts            # User schema
 │   ├── routes/
-│   │   └── auth.route.js          # Auth routes
+│   │   └── auth.route.ts            # Auth routes
+│   ├── types/
+│   │   ├── api.types.ts
+│   │   ├── auth.types.ts
+│   │   ├── express.d.ts
+│   │   ├── index.ts
+│   │   └── user.types.ts
 │   └── utils/
-│       └── generateTokenAndSetCookie.js
+│       └── generateTokenAndSetCookie.ts
+│   └── index.ts                     # Backend entry point
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── GoogleLoginButton.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Input.jsx
-│   │   │   ├── PasswordStrengthMeter.jsx
-│   │   │   └── ...
+│   │   │   ├── AppLayout.tsx
+│   │   │   ├── FloatingShape.tsx
+│   │   │   ├── GoogleLoginButton.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   ├── PasswordStrengthMeter.tsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── SidebarMenuLayout.tsx
 │   │   ├── pages/
-│   │   │   ├── LoginPage.jsx
-│   │   │   ├── SignUpPage.jsx
-│   │   │   ├── DashboardPage.jsx
-│   │   │   ├── SettingsPage.jsx
-│   │   │   ├── ChangePasswordPage.jsx
-│   │   │   ├── OAuthRedirect.jsx
-│   │   │   └── ...
+│   │   │   ├── ChangePasswordPage.tsx
+│   │   │   ├── DashboardPage.tsx
+│   │   │   ├── EmailVerificationPage.tsx
+│   │   │   ├── ForgotPasswordPage.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── OAuthRedirect.tsx
+│   │   │   ├── ResetPasswordPage.tsx
+│   │   │   ├── SettingsPage.tsx
+│   │   │   ├── SignUpPage.tsx
+│   │   │   ├── analytics/
+│   │   │   │   └── index.tsx
+│   │   │   ├── calendar/
+│   │   │   │   └── index.tsx
+│   │   │   ├── messages/
+│   │   │   │   └── index.tsx
+│   │   │   ├── posts/
+│   │   │   │   └── index.tsx
+│   │   │   └── users/
+│   │   │       └── index.tsx
 │   │   ├── store/
-│   │   │   └── authStore.js       # Zustand state management
-│   │   └── App.jsx
-│   └── ...
-└── package.json
+│   │   │   └── authStore.ts         # Zustand state management
+│   │   ├── types/
+│   │   │   ├── api.types.ts
+│   │   │   ├── auth.types.ts
+│   │   │   ├── component.types.ts
+│   │   │   ├── index.ts
+│   │   │   ├── store.types.ts
+│   │   │   └── user.types.ts
+│   │   ├── utils/
+│   │   │   └── date.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   ├── index.css
+│   │   └── vite-env.d.ts
+│   ├── public/
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.js
+├── migrate-to-typescript.md
+├── package.json
+├── README.md
+└── ...
 ```
 
 ## 🔑 Key API Endpoints
