@@ -1,13 +1,13 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.ts";
 import {
 	sendPasswordResetEmail,
 	sendResetSuccessEmail,
 	sendVerificationEmail,
 	sendWelcomeEmail,
-} from "../mailtrap/emails.js";
+} from "../mailtrap/emails.ts";
 import { User } from "../models/user.model.js";
 
 export const signup = async (req, res) => {
