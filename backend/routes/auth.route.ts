@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import {
 	login,
 	logout,
@@ -10,9 +10,9 @@ import {
 	changePassword
 } from "../controllers/auth.controller.js";
 import { getGoogleAuthUrl, googleAuthCallback } from "../controllers/googleAuth.controller.js";
-import { verifyToken } from "../middleware/verifyToken.ts";
+import { verifyToken } from "../middleware/verifyToken.js";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Google OAuth routes
 router.get("/google/url", getGoogleAuthUrl);

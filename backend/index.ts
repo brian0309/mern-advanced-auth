@@ -1,22 +1,22 @@
-import express from "express";
+import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { connectDB } from "./db/connectDB.ts";
+import { connectDB } from "./db/connectDB.js";
 
 // Get the directory name in ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename: string = fileURLToPath(import.meta.url);
+const __dirname: string = path.dirname(__filename);
 
 // Load environment variables from root .env file
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import authRoutes from "./routes/auth.route.js";
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const app: Express = express();
+const PORT: number = parseInt(process.env.PORT || "5000", 10);
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
@@ -28,7 +28,7 @@ app.use("/api/auth", authRoutes);
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-	app.get("*", (req, res) => {
+	app.get("*", (req: Request, res: Response) => {
 		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 	});
 }
