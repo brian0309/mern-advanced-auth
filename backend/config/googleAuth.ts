@@ -1,12 +1,25 @@
 import { OAuth2Client } from 'google-auth-library';
 import crypto from 'crypto';
 
+interface GoogleAuthUrlResult {
+	url: string;
+	state: string;
+}
+
+interface GoogleUserProfile {
+	id: string;
+	email: string;
+	name: string;
+	picture: string;
+	verified_email: boolean;
+}
+
 // Initialize with default values that will be replaced by environment variables
-let googleClient;
-let redirectUri;
+let googleClient: OAuth2Client | undefined;
+let redirectUri: string;
 let isInitialized = false;
 
-const initializeGoogleClient = () => {
+const initializeGoogleClient = (): OAuth2Client => {
     // Return cached client if already initialized
     if (isInitialized && googleClient) {
         return googleClient;
@@ -31,7 +44,7 @@ const initializeGoogleClient = () => {
         // 'https://yourdomain.com/api/auth/google/callback',
     ];
 
-    redirectUri = process.env.GOOGLE_REDIRECT_URI;
+    redirectUri = process.env.GOOGLE_REDIRECT_URI as string;
     
     if (!redirectUri) {
         throw new Error('GOOGLE_REDIRECT_URI environment variable is required');
@@ -58,11 +71,11 @@ const initializeGoogleClient = () => {
         return googleClient;
     } catch (error) {
         console.error('Error initializing Google OAuth client:', error);
-        throw new Error(`Failed to initialize Google OAuth client: ${error.message}`);
+        throw new Error(`Failed to initialize Google OAuth client: ${(error as Error).message}`);
     }
 };
 
-export const getGoogleAuthURL = () => {
+export const getGoogleAuthURL = (): GoogleAuthUrlResult => {
     try {
         // Initialize client if not already done (uses cache)
         if (!isInitialized || !googleClient) {
@@ -75,7 +88,7 @@ export const getGoogleAuthURL = () => {
         const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
         const options = {
             redirect_uri: redirectUri,
-            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_id: process.env.GOOGLE_CLIENT_ID as string,
             access_type: 'offline',
             response_type: 'code',
             prompt: 'consent',
@@ -91,12 +104,12 @@ export const getGoogleAuthURL = () => {
         // Return both URL and state - controller must store state in session/cookie
         return { url, state };
     } catch (error) {
-        console.error('Error generating Google Auth URL:', error.message);
+        console.error('Error generating Google Auth URL:', (error as Error).message);
         throw new Error('Failed to generate Google authentication URL');
     }
 };
 
-export const getGoogleUser = async (code) => {
+export const getGoogleUser = async (code: string): Promise<GoogleUserProfile> => {
     try {
         // Initialize client if not already done (uses cache)
         if (!isInitialized || !googleClient) {
@@ -115,11 +128,15 @@ export const getGoogleUser = async (code) => {
         // Verify the ID token
         const ticket = await googleClient.verifyIdToken({
             idToken: tokens.id_token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: process.env.GOOGLE_CLIENT_ID as string,
         });
 
         const payload = ticket.getPayload();
         
+        if (!payload) {
+            throw new Error('Failed to get payload from ID token');
+        }
+
         // Verify the token is for your application
         if (payload.aud !== process.env.GOOGLE_CLIENT_ID) {
             throw new Error('Token audience mismatch');
@@ -133,13 +150,13 @@ export const getGoogleUser = async (code) => {
         // Return verified user data from the ID token
         return {
             id: payload.sub,
-            email: payload.email,
-            name: payload.name,
-            picture: payload.picture,
+            email: payload.email as string,
+            name: payload.name as string,
+            picture: payload.picture as string,
             verified_email: payload.email_verified,
         };
     } catch (error) {
-        console.error('Error getting Google user:', error.message);
+        console.error('Error getting Google user:', (error as Error).message);
         throw new Error('Failed to authenticate with Google');
     }
 };

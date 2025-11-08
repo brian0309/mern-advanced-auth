@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-export const connectDB = async () => {
+export const connectDB = async (): Promise<void> => {
 	try {
 		console.log("mongo_uri: ", process.env.MONGO_URI);
-		const conn = await mongoose.connect(process.env.MONGO_URI, {
+		const conn = await mongoose.connect(process.env.MONGO_URI as string, {
 			// Connection pool settings for better performance
 			maxPoolSize: 10, // Maximum number of connections in the pool
 			minPoolSize: 2,  // Minimum number of connections to maintain
@@ -13,7 +13,7 @@ export const connectDB = async () => {
 		});
 		console.log(`MongoDB Connected: ${conn.connection.host}`);
 	} catch (error) {
-		console.log("Error connection to MongoDB: ", error.message);
+		console.log("Error connection to MongoDB: ", (error as Error).message);
 		process.exit(1); // 1 is failure, 0 status code is success
 	}
 };

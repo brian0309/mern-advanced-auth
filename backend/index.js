@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { connectDB } from "./db/connectDB.js";
+import { connectDB } from "./db/connectDB.ts";
 
 // Get the directory name in ES module
 const __filename = fileURLToPath(import.meta.url);

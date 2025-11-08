@@ -5,7 +5,7 @@ import {
 } from "./emailTemplates.js";
 import { mailtrapClient, sender } from "./mailtrap.config.js";
 
-export const sendVerificationEmail = async (email, verificationToken) => {
+export const sendVerificationEmail = async (email: string, verificationToken: string): Promise<void> => {
 	const recipient = [{ email }];
 
 	try {
@@ -25,7 +25,7 @@ export const sendVerificationEmail = async (email, verificationToken) => {
 	}
 };
 
-export const sendWelcomeEmail = async (email, name) => {
+export const sendWelcomeEmail = async (email: string, name: string): Promise<void> => {
 	const recipient = [{ email }];
 
 	try {
@@ -47,7 +47,7 @@ export const sendWelcomeEmail = async (email, name) => {
 	}
 };
 
-export const sendPasswordResetEmail = async (email, resetURL) => {
+export const sendPasswordResetEmail = async (email: string, resetURL: string): Promise<void> => {
 	const recipient = [{ email }];
 
 	try {
@@ -65,7 +65,7 @@ export const sendPasswordResetEmail = async (email, resetURL) => {
 	}
 };
 
-export const sendResetSuccessEmail = async (email) => {
+export const sendResetSuccessEmail = async (email: string): Promise<void> => {
 	const recipient = [{ email }];
 
 	try {
