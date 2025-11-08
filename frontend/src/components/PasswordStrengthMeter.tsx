@@ -1,7 +1,17 @@
+import React from "react";
 import { Check, X } from "lucide-react";
 
-const PasswordCriteria = ({ password }) => {
-	const criteria = [
+interface PasswordCriteriaProps {
+	password: string;
+}
+
+interface Criterion {
+	label: string;
+	met: boolean;
+}
+
+const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({ password }) => {
+	const criteria: Criterion[] = [
 		{ label: "At least 6 characters", met: password.length >= 6 },
 		{ label: "Contains uppercase letter", met: /[A-Z]/.test(password) },
 		{ label: "Contains lowercase letter", met: /[a-z]/.test(password) },
@@ -25,8 +35,12 @@ const PasswordCriteria = ({ password }) => {
 	);
 };
 
-const PasswordStrengthMeter = ({ password }) => {
-	const getStrength = (pass) => {
+interface PasswordStrengthMeterProps {
+	password: string;
+}
+
+const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ password }) => {
+	const getStrength = (pass: string): number => {
 		let strength = 0;
 		if (pass.length >= 6) strength++;
 		if (pass.match(/[a-z]/) && pass.match(/[A-Z]/)) strength++;
@@ -36,7 +50,7 @@ const PasswordStrengthMeter = ({ password }) => {
 	};
 	const strength = getStrength(password);
 
-	const getColor = (strength) => {
+	const getColor = (strength: number): string => {
 		if (strength === 0) return "bg-red-500";
 		if (strength === 1) return "bg-red-400";
 		if (strength === 2) return "bg-yellow-500";
@@ -44,7 +58,7 @@ const PasswordStrengthMeter = ({ password }) => {
 		return "bg-green-500";
 	};
 
-	const getStrengthText = (strength) => {
+	const getStrengthText = (strength: number): string => {
 		if (strength === 0) return "Very Weak";
 		if (strength === 1) return "Weak";
 		if (strength === 2) return "Fair";

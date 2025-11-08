@@ -1,24 +1,45 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
-import { formatDate } from "../utils/date";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Users, FileText, MessageSquare, Calendar, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+import { Users, FileText, MessageSquare, Calendar, Clock, ArrowUp, ArrowDown, LucideIcon } from 'lucide-react';
 
-const stats = [
+interface Stat {
+  name: string;
+  value: string;
+  change: string;
+  changeType: 'increase' | 'decrease' | 'neutral';
+  icon: LucideIcon;
+}
+
+interface Activity {
+  id: number;
+  user: string;
+  action: string;
+  time: string;
+  avatar: string;
+}
+
+interface ChartDataPoint {
+  name: string;
+  value: number;
+}
+
+const stats: Stat[] = [
   { name: 'Total Users', value: '2,420', change: '+11%', changeType: 'increase', icon: Users },
   { name: 'Total Posts', value: '1,210', change: '+5.4%', changeType: 'increase', icon: FileText },
   { name: 'Messages', value: '568', change: '-2.3%', changeType: 'decrease', icon: MessageSquare },
   { name: 'Upcoming Events', value: '12', change: '+3', changeType: 'neutral', icon: Calendar },
 ];
 
-const recentActivity = [
+const recentActivity: Activity[] = [
   { id: 1, user: 'John Doe', action: 'created a new post', time: '2 minutes ago', avatar: 'JD' },
   { id: 2, user: 'Jane Smith', action: 'updated profile', time: '10 minutes ago', avatar: 'JS' },
   { id: 3, user: 'Mike Johnson', action: 'commented on post', time: '25 minutes ago', avatar: 'MJ' },
   { id: 4, user: 'Sarah Williams', action: 'joined the platform', time: '1 hour ago', avatar: 'SW' },
 ];
 
-const chartData = [
+const chartData: ChartDataPoint[] = [
   { name: 'Jan', value: 4000 },
   { name: 'Feb', value: 3000 },
   { name: 'Mar', value: 5000 },
@@ -28,7 +49,7 @@ const chartData = [
   { name: 'Jul', value: 3490 },
 ];
 
-const DashboardPage = () => {
+const DashboardPage: React.FC = () => {
   const { user } = useAuthStore();
 
   return (

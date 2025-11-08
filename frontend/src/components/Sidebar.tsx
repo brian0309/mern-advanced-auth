@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { 
@@ -14,21 +15,38 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-const Sidebar = ({ isCollapsed, toggleSidebar }) => {
+interface SidebarProps {
+  isCollapsed: boolean;
+  toggleSidebar: () => void;
+}
+
+interface MenuItem {
+  icon: React.ReactNode;
+  label: string;
+  to: string;
+  subItems: SubMenuItem[];
+}
+
+interface SubMenuItem {
+  label: string;
+  to: string;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   const { logout } = useAuthStore();
   const navigate = useNavigate();
-  const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  const toggleSubMenu = (menu) => {
+  const toggleSubMenu = (menu: string): void => {
     setActiveSubMenu(activeSubMenu === menu ? null : menu);
   };
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { 
       icon: <LayoutDashboard size={20} />, 
       label: 'Dashboard', 

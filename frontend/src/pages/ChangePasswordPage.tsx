@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
@@ -7,16 +8,16 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 
-const ChangePasswordPage = () => {
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [formError, setFormError] = useState("");
-    const [isSuccess, setIsSuccess] = useState(false);
+const ChangePasswordPage: React.FC = () => {
+    const [currentPassword, setCurrentPassword] = useState<string>("");
+    const [newPassword, setNewPassword] = useState<string>("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+    const [formError, setFormError] = useState<string>("");
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const { changePassword, clearError, error, isLoading } = useAuthStore();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setFormError("");
         clearError();
@@ -39,7 +40,7 @@ const ChangePasswordPage = () => {
             setTimeout(() => {
                 setIsSuccess(false);
             }, 3000);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
             if (error.response && error.response.status === 400) {
                 setFormError("Current password is incorrect");

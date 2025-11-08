@@ -1,9 +1,10 @@
+import React from "react";
 import { useAuthStore } from "../store/authStore";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const GoogleLoginButton = () => {
-  const { loginWithGoogle, setUser, setError } = useAuthStore();
+const GoogleLoginButton: React.FC = () => {
+  const { setUser } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,13 +21,13 @@ const GoogleLoginButton = () => {
         setUser(user);
         navigate('/');
       } catch (err) {
-        setError('Failed to process Google login');
+        useAuthStore.setState({ error: 'Failed to process Google login' });
         console.error('Error parsing user data:', err);
       }
     } else if (error) {
-      setError('Google login failed. Please try again.');
+      useAuthStore.setState({ error: 'Google login failed. Please try again.' });
     }
-  }, [location.search, navigate, setUser, setError]);
+  }, [location.search, navigate, setUser]);
 
   const handleGoogleLogin = async () => {
     try {
@@ -41,11 +42,11 @@ const GoogleLoginButton = () => {
         // Redirect to Google's OAuth page
         window.location.href = data.url;
       } else {
-        setError('Failed to initiate Google login');
+        useAuthStore.setState({ error: 'Failed to initiate Google login' });
       }
     } catch (err) {
       console.error('Error initiating Google login:', err);
-      setError('Failed to initiate Google login');
+      useAuthStore.setState({ error: 'Failed to initiate Google login' });
     }
   };
 

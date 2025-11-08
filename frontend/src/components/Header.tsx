@@ -1,7 +1,12 @@
+import React from "react";
 import { useAuthStore } from "../store/authStore";
 import { Bell, Search, Menu } from 'lucide-react';
 
-const Header = ({ toggleSidebar }) => {
+interface HeaderProps {
+  toggleSidebar: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   const { user } = useAuthStore();
 
   return (
@@ -39,7 +44,6 @@ const Header = ({ toggleSidebar }) => {
             </div>
             <div className="hidden md:block">
               <p className="text-sm font-medium text-gray-800">{user?.name || 'User'}</p>
-              <p className="text-xs text-gray-500">{user?.role || 'User'}</p>
             </div>
           </div>
         </div>
