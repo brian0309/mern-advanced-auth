@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
@@ -6,15 +7,15 @@ import Input from "../components/Input";
 import { Lock } from "lucide-react";
 import toast from "react-hot-toast";
 
-const ResetPasswordPage = () => {
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
+const ResetPasswordPage: React.FC = () => {
+	const [password, setPassword] = useState<string>("");
+	const [confirmPassword, setConfirmPassword] = useState<string>("");
 	const { resetPassword, error, isLoading, message } = useAuthStore();
 
-	const { token } = useParams();
+	const { token } = useParams<{ token: string }>();
 	const navigate = useNavigate();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 
 		if (password !== confirmPassword) {
@@ -22,15 +23,15 @@ const ResetPasswordPage = () => {
 			return;
 		}
 		try {
-			await resetPassword(token, password);
+			await resetPassword(token!, password);
 
 			toast.success("Password reset successfully, redirecting to login page...");
 			setTimeout(() => {
 				navigate("/login");
 			}, 2000);
-		} catch (error) {
+		} catch (error: any) {
 			console.error(error);
-			toast.error(error.message || "Error resetting password");
+			toast.error(error?.message || "Error resetting password");
 		}
 	};
 

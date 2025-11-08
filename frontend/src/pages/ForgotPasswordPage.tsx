@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
@@ -5,13 +6,13 @@ import Input from "../components/Input";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ForgotPasswordPage = () => {
-	const [email, setEmail] = useState("");
-	const [isSubmitted, setIsSubmitted] = useState(false);
+const ForgotPasswordPage: React.FC = () => {
+	const [email, setEmail] = useState<string>("");
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
 	const { isLoading, forgotPassword } = useAuthStore();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 		await forgotPassword(email);
 		setIsSubmitted(true);

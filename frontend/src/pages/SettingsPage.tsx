@@ -1,16 +1,31 @@
+import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import Input from "../components/Input";
-import { Lock, User, Mail, Globe, Calendar } from "lucide-react";
+import { Lock } from "lucide-react";
 import toast from "react-hot-toast";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
+import { User } from "../types";
 
-const SettingsPage = () => {
-    const [activeTab, setActiveTab] = useState("general");
+interface Tab {
+    id: string;
+    label: string;
+}
+
+interface GeneralTabProps {
+    user: User | null;
+}
+
+interface PlaceholderTabProps {
+    title: string;
+}
+
+const SettingsPage: React.FC = () => {
+    const [activeTab, setActiveTab] = useState<string>("general");
     const { user } = useAuthStore();
 
-    const tabs = [
+    const tabs: Tab[] = [
         { id: "general", label: "General" },
         { id: "security", label: "Security" },
         { id: "billing", label: "Billing" },
@@ -75,7 +90,7 @@ const SettingsPage = () => {
 };
 
 // General Tab Component
-const GeneralTab = ({ user }) => {
+const GeneralTab: React.FC<GeneralTabProps> = ({ user }) => {
     return (
         <div className="bg-white rounded-lg shadow-sm">
             <div className="p-6">
@@ -211,7 +226,7 @@ const SecurityTab = () => {
     const [formError, setFormError] = useState("");
     const { changePassword, clearError, error, isLoading } = useAuthStore();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setFormError("");
         clearError();
@@ -228,12 +243,12 @@ const SecurityTab = () => {
             setCurrentPassword("");
             setNewPassword("");
             setConfirmNewPassword("");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            if (error.response && error.response.status === 400) {
+            if (error?.response && error.response.status === 400) {
                 setFormError("Current password is incorrect");
             } else {
-                setFormError(error.message || "Error changing password. Please try again.");
+                setFormError(error?.message || "Error changing password. Please try again.");
             }
         }
     };
@@ -334,7 +349,7 @@ const SecurityTab = () => {
 };
 
 // Placeholder Tab Component
-const PlaceholderTab = ({ title }) => {
+const PlaceholderTab: React.FC<PlaceholderTabProps> = ({ title }) => {
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-2">{title}</h2>

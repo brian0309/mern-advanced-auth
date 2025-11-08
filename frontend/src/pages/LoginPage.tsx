@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
@@ -6,13 +7,13 @@ import Input from "../components/Input";
 import { useAuthStore } from "../store/authStore";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 
-const LoginPage = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+const LoginPage: React.FC = () => {
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
 
 	const { login, isLoading, error } = useAuthStore();
 
-	const handleLogin = async (e) => {
+	const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
 		await login(email, password);
 	};
