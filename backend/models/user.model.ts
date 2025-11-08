@@ -1,15 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IUserDocument } from "../types/user.types.js";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema<IUserDocument>(
 	{
 		email: {
 			type: String,
-			required: function() { return !this.googleId; },
+			required: function(this: IUserDocument) { return !this.googleId; },
 			unique: true,
 		},
 		password: {
 			type: String,
-			required: function() { return !this.googleId; },
+			required: function(this: IUserDocument) { return !this.googleId; },
 		},
 		name: {
 			type: String,
@@ -43,4 +44,4 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ verificationToken: 1, verificationTokenExpiresAt: 1 }); // For email verification with expiry check
 userSchema.index({ resetPasswordToken: 1, resetPasswordExpiresAt: 1 }); // For password reset with expiry check
 
-export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model<IUserDocument>("User", userSchema);

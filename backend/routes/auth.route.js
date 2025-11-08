@@ -10,7 +10,7 @@ import {
 	changePassword
 } from "../controllers/auth.controller.js";
 import { getGoogleAuthUrl, googleAuthCallback } from "../controllers/googleAuth.controller.js";
-import { verifyToken } from "../middleware/verifyToken.js";
+import { verifyToken } from "../middleware/verifyToken.ts";
 
 const router = express.Router();
 
