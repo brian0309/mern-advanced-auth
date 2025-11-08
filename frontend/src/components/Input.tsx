@@ -1,4 +1,11 @@
-const Input = ({ icon: Icon, ...props }) => {
+import React from "react";
+import { LucideIcon } from "lucide-react";
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+	icon: LucideIcon;
+}
+
+const Input: React.FC<InputProps> = ({ icon: Icon, ...props }) => {
 	return (
 		<div className='relative mb-6'>
 			<div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
