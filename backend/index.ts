@@ -26,11 +26,11 @@ app.use(cookieParser()); // allows us to parse incoming cookies
 app.use("/api/auth", authRoutes);
 
 if (process.env.NODE_ENV === "production") {
-	// Serve static files from the actual frontend build directory
-	app.use(express.static(path.join(__dirname, "../frontend/dist")));
+	// Serve static files from the actual frontend build directory (works from dist/backend)
+	app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
 	app.get("*", (req: Request, res: Response) => {
-		res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+		res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
 	});
 }
 
