@@ -420,6 +420,8 @@ Deploy frontend and backend as **separate Vercel projects** for maximum flexibil
 
 📖 **[Complete Guide: Separate Vercel Deployment →](./Documentation/Deployment/VERCEL_SEPARATE_DEPLOYMENT.md)**
 
+> 🔧 **Troubleshooting Connection Issues?** See the [Vercel Connection Fix Guide](./Documentation/VERCEL_CONNECTION_FIX.md) for common issues and solutions.
+
 #### 🔄 Traditional Hosting
 
 Deploy to platforms like Heroku, Render, Railway, DigitalOcean, AWS, etc. as a single application:
@@ -446,6 +448,7 @@ The app automatically detects the environment and adapts. **No code changes need
 
 - [Deployment Guide](./Documentation/Deployment/DEPLOYMENT.md) - Traditional hosting
 - [Separate Vercel Deployment](./Documentation/Deployment/VERCEL_SEPARATE_DEPLOYMENT.md) - Separate Vercel deployment
+- [Vercel Connection Fix](./Documentation/VERCEL_CONNECTION_FIX.md) - **Fix frontend-backend connection issues**
 - [Environment Comparison](./Documentation/Deployment/ENVIRONMENT_COMPARISON.md) - Compare deployment environments
 - [Vercel Configuration](./Documentation/Deployment/VERCEL_CONFIG.md) - Vercel config explained
 
