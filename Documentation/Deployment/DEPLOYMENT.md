@@ -1,11 +1,35 @@
 # 🚀 Deployment Guide
 
-This guide will help you deploy your MERN Advanced Auth application to Vercel with one-click deployment.
+This guide will help you deploy your MERN Advanced Auth application.
+
+## Deployment Options
+
+This application supports **two Vercel deployment strategies**:
+
+### 1. 🎯 Separate Deployment (Recommended)
+Deploy frontend and backend as **separate Vercel projects** for maximum flexibility:
+
+- ✅ Independent scaling
+- ✅ Better performance  
+- ✅ Deploy frontend/backend independently
+- ✅ Optimized for each tier
+
+**📖 [See Separate Deployment Guide →](./VERCEL_SEPARATE_DEPLOYMENT.md)**
+
+### 2. 🔄 Traditional Deployment
+Deploy to platforms like Heroku, Render, Railway, DigitalOcean, etc. as a **single monolithic application**:
+
+- ✅ Single server deployment
+- ✅ Simpler setup
+- ✅ Works on any Node.js hosting
+
+**Continue reading this guide for traditional deployment.**
+
+---
 
 ## Table of Contents
 - [Deployment Compatibility](#deployment-compatibility)
-- [One-Click Deployment](#one-click-deployment)
-- [Manual Deployment](#manual-deployment)
+- [Local Development](#local-development)
 - [Traditional Hosting Deployment](#traditional-hosting-deployment)
 - [Environment Variables](#environment-variables)
 - [Post-Deployment Configuration](#post-deployment-configuration)
@@ -130,71 +154,6 @@ npm start
 Then visit `http://localhost:5000` - the backend will serve the frontend.
 
 **Note:** In production mode, you only need one server running on port 5000.
-
----
-
-## One-Click Deployment
-
-### Quick Deploy to Vercel
-
-1. **Click the Deploy Button** in the README or use this link:
-   ```
-   https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth
-   ```
-
-2. **Sign in to Vercel** (if not already signed in)
-
-3. **Configure Your Project**
-   - Choose a project name
-   - Select your Git scope (personal or team)
-
-4. **Set Environment Variables**
-   - Vercel will prompt you to add environment variables
-   - See [Environment Variables](#environment-variables) section below
-   - You can also add these later in Project Settings
-
-5. **Deploy**
-   - Click "Deploy"
-   - Wait for the build to complete (usually 2-5 minutes)
-
----
-
-## Manual Deployment
-
-If you prefer to deploy manually:
-
-### Prerequisites
-- Vercel account
-- Git repository (GitHub, GitLab, or Bitbucket)
-- MongoDB Atlas database
-- Google OAuth credentials
-- Mailtrap account
-
-### Steps
-
-1. **Push your code to a Git repository**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-repo-url>
-   git push -u origin master
-   ```
-
-2. **Import Project to Vercel**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "Add New..." → "Project"
-   - Import your Git repository
-   - Vercel will auto-detect the configuration from `vercel.json`
-
-3. **Configure Build Settings** (should be auto-detected)
-   - Build Command: `npm run build`
-   - Output Directory: `frontend/dist`
-   - Install Command: `npm install && npm install --prefix frontend`
-
-4. **Add Environment Variables** (see below)
-
-5. **Deploy**
 
 ---
 

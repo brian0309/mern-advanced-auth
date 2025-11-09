@@ -402,39 +402,54 @@ mern-advanced-auth/
 
 ## 🚀 Deployment
 
+### Deployment Options
+
+This application supports **flexible deployment strategies**:
+
+#### 🎯 Separate Vercel Deployment (Recommended)
+
+Deploy frontend and backend as **separate Vercel projects** for maximum flexibility and performance:
+
+**Deploy Backend:**
+
+[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,CLIENT_URL,NODE_ENV)
+
+**Deploy Frontend:**
+
+[![Deploy Frontend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-frontend&root-directory=frontend&env=VITE_API_URL)
+
+📖 **[Complete Guide: Separate Vercel Deployment →](./Documentation/Deployment/VERCEL_SEPARATE_DEPLOYMENT.md)**
+
+#### 🔄 Traditional Hosting
+
+Deploy to platforms like Heroku, Render, Railway, DigitalOcean, AWS, etc. as a single application:
+
+```bash
+npm run build
+npm start
+```
+
+📖 **[Complete Guide: Traditional Deployment →](./Documentation/Deployment/DEPLOYMENT.md)**
+
 ### Deployment Compatibility
 
 **This application works on ALL platforms with the same code!** ✨
 
 - ✅ **Local Development** - `npm run dev` (works exactly as before)
 - ✅ **Traditional Hosting** - Heroku, Render, Railway, DigitalOcean, AWS, etc.
-- ✅ **Serverless** - Vercel one-click deploy
+- ✅ **Vercel Separate** - Deploy frontend and backend independently
+- ✅ **Vercel Monolithic** - Deploy as a single application (use `vercel.json.monolithic`)
 
 The app automatically detects the environment and adapts. **No code changes needed!**
 
-📖 For deployment details see:
+📖 **Additional Documentation:**
 
-- [Deployment Guide](./Documentation/Deployment/DEPLOYMENT.md)
-- [Environment Comparison](./Documentation/Deployment/ENVIRONMENT_COMPARISON.md)
-- [Vercel Configuration](./Documentation/Deployment/VERCEL_CONFIG.md)
+- [Deployment Guide](./Documentation/Deployment/DEPLOYMENT.md) - Traditional hosting
+- [Separate Vercel Deployment](./Documentation/Deployment/VERCEL_SEPARATE_DEPLOYMENT.md) - Separate Vercel deployment
+- [Environment Comparison](./Documentation/Deployment/ENVIRONMENT_COMPARISON.md) - Compare deployment environments
+- [Vercel Configuration](./Documentation/Deployment/VERCEL_CONFIG.md) - Vercel config explained
 
 These files live in `Documentation/Deployment/`.
-
-### One-Click Deploy to Vercel
-
-This repository includes a one-click Vercel deployment option. Full details (required environment variables, post-deployment steps, and Vercel config) live in the Deployment documentation: [Documentation/Deployment/VERCEL_CONFIG.md](./Documentation/Deployment/VERCEL_CONFIG.md).
-
-If you prefer a quick deploy button, the repo also includes the Vercel button configuration referenced in the docs.
-
-### Manual Deployment
-
-For production deployment on other platforms:
-1. Update environment variables with production values
-2. Add production URLs to Google OAuth credentials
-3. Use a production-ready database (MongoDB Atlas)
-4. Set `NODE_ENV=production`
-5. Configure CORS for your production domain
-6. Use a real email service (replace Mailtrap)
 
 ## 📚 Learning Resources
 

@@ -13,7 +13,8 @@ Quick reference guide showing how the application runs in different environments
 | **Heroku** | `npm run build` + `npm start` | Heroku dyno | Served by backend | Traditional hosting |
 | **Render** | `npm run build` + `npm start` | Render service | Served by backend | Traditional hosting |
 | **Railway** | `npm run build` + `npm start` | Railway service | Served by backend | Traditional hosting |
-| **Vercel** | One-click deploy | Serverless functions | Global CDN | Serverless |
+| **Vercel Separate** | Separate deployments | Backend serverless | Frontend CDN | **Recommended for Vercel** |
+| **Vercel Monolithic** | Single deployment | Serverless functions | Global CDN | Legacy approach |
 
 ## Detailed Breakdown
 
