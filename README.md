@@ -438,7 +438,33 @@ mern-advanced-auth/
 
 ## 🚀 Deployment
 
-For production deployment:
+### Deployment Compatibility
+
+**This application works on ALL platforms with the same code!** ✨
+
+- ✅ **Local Development** - `npm run dev` (works exactly as before)
+- ✅ **Traditional Hosting** - Heroku, Render, Railway, DigitalOcean, AWS, etc.
+- ✅ **Serverless** - Vercel one-click deploy
+
+The app automatically detects the environment and adapts. **No code changes needed!**
+
+📖 For deployment details see:
+
+- [Deployment Guide](./Documentation/Deployment/DEPLOYMENT.md)
+- [Environment Comparison](./Documentation/Deployment/ENVIRONMENT_COMPARISON.md)
+- [Vercel Configuration](./Documentation/Deployment/VERCEL_CONFIG.md)
+
+These files live in `Documentation/Deployment/`.
+
+### One-Click Deploy to Vercel
+
+This repository includes a one-click Vercel deployment option. Full details (required environment variables, post-deployment steps, and Vercel config) live in the Deployment documentation: [Documentation/Deployment/VERCEL_CONFIG.md](./Documentation/Deployment/VERCEL_CONFIG.md).
+
+If you prefer a quick deploy button, the repo also includes the Vercel button configuration referenced in the docs.
+
+### Manual Deployment
+
+For production deployment on other platforms:
 1. Update environment variables with production values
 2. Add production URLs to Google OAuth credentials
 3. Use a production-ready database (MongoDB Atlas)
