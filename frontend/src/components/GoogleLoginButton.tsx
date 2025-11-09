@@ -2,6 +2,7 @@ import React from "react";
 import { useAuthStore } from "../store/authStore";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { API_URL } from "../utils/api";
 
 const GoogleLoginButton: React.FC = () => {
   const { setUser } = useAuthStore();
@@ -32,7 +33,7 @@ const GoogleLoginButton: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       // This will trigger the backend to generate the Google OAuth URL
-      const response = await fetch('http://localhost:5000/api/auth/google/url', {
+      const response = await fetch(`${API_URL}/google/url`, {
         method: 'GET',
         credentials: 'include', // This is crucial - allows cookies to be set and sent
       });
