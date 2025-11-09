@@ -14,41 +14,10 @@ A full-stack authentication system built with the MERN stack (MongoDB, Express, 
 > **🟦 Now fully migrated to TypeScript!**
 > - Backend and frontend are 100% TypeScript
 > - All scripts, types, and configs updated
-> - See [`migrate-to-typescript.md`](./migrate-to-typescript.md) for migration details
+> - See [`migrate-to-typescript.md`](./Documentation/Migration/migrate-to-typescript.md) for migration details
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd mern-advanced-auth
-   ```
-
-2. **Install dependencies and build**
-   ```bash
-   npm run build
-   ```
-   This will install both backend and frontend dependencies and build the TypeScript code.
-**Development Mode (TypeScript):**
-```bash
-npm run dev
-```
-- Starts backend with ts-node-dev (TypeScript hot-reloading)
-- Starts frontend (Vite + React + TypeScript)
-
-**Production Mode:**
-```bash
-npm run start
-```
-
-**Frontend (separate terminal, if needed):**
-```bash
-cd frontend
-npm run dev
-```
-
-The application will be available at:
- - Frontend: `http://localhost:5173`
- - Backend: `http://localhost:5000`
+See the "Getting Started" section below for a consolidated, full installation and running guide.
 ## 📘 TypeScript & Learning Resources
 
 This project covers:
@@ -61,17 +30,12 @@ This project covers:
 - State management with Zustand
 - Tailwind CSS styling
 - API design and security
-- **TypeScript best practices (see [`migrate-to-typescript.md`](./migrate-to-typescript.md))**
+   - **TypeScript best practices (see [`migrate-to-typescript.md`](./Documentation/Migration/migrate-to-typescript.md))**
 
 **Recommended:**
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
 - [TypeScript with Express](https://blog.logrocket.com/how-to-set-up-node-typescript-express/)
-<h1 align="center">Advanced MERN Auth Application 🔒 </h1>
-
-![Demo App](/frontend/public/screenshot-for-readme.png)
-
-A full-stack authentication system built with the MERN stack (MongoDB, Express, React, Node.js) featuring advanced authentication methods including email/password and Google OAuth, complete with email verification, password reset, and a modern dashboard UI.
 
 ## 🌟 Features Implemented
 
