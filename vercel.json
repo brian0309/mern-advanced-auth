@@ -27,7 +27,6 @@
       "dest": "frontend/dist/index.html"
     }
   ],
-  "outputDirectory": "frontend/dist",
   "framework": null,
   "installCommand": "npm install && npm install --prefix frontend",
   "buildCommand": "npm run build"
