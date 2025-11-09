@@ -31,7 +31,9 @@ app.use(cookieParser()); // allows us to parse incoming cookies
 
 app.use("/api/auth", authRoutes);
 
-if (process.env.NODE_ENV === "production") {
+// Only serve frontend static files in production for traditional deployment
+// (not when deployed separately to Vercel)
+if (process.env.NODE_ENV === "production" && process.env.VERCEL !== '1') {
 	// Serve static files from the actual frontend build directory (works from dist/backend)
 	app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 

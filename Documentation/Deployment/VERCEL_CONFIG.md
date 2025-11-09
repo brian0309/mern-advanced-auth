@@ -1,124 +1,207 @@
 # Vercel Configuration Explained
 
-This document explains the `vercel.json` configuration for deploying the MERN Advanced Auth application.
+This document explains the Vercel configuration options for deploying the MERN Advanced Auth application.
 
-## Configuration Breakdown
+## Deployment Options
 
-### Version
-```json
-"version": 2
-```
-- Uses Vercel's Build API v2
+This repository supports **two Vercel deployment strategies**:
 
-### Builds
-Defines how different parts of the application should be built:
+### 1. Separate Deployment (Recommended)
+Deploy frontend and backend as **separate Vercel projects**:
+- Each component has its own `vercel.json` configuration
+- Backend: `backend/vercel.json`
+- Frontend: `frontend/vercel.json`
+- **📖 [See Complete Guide](./VERCEL_SEPARATE_DEPLOYMENT.md)**
 
-#### Backend Build
+### 2. Monolithic Deployment (Legacy)
+Deploy both together as a single Vercel project:
+- Uses `vercel.json.monolithic` at repository root
+- Combines frontend and backend in one deployment
+- Useful for simpler setups or migration
+
+---
+
+## Separate Deployment Configuration
+
+### Backend Configuration (`backend/vercel.json`)
+
 ```json
 {
-  "src": "api/index.ts",
-  "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "index.ts"
+    }
+  ]
 }
 ```
-- **src**: Entry point for backend serverless function
-- **use**: Uses Node.js runtime builder
-- The `api/index.ts` imports and exports the Express app from `backend/index.ts`
 
-#### Frontend Build
+**How it works:**
+- `builds`: Compiles TypeScript backend to serverless function
+- `routes`: Routes all requests to the backend Express app
+- Vercel automatically sets `VERCEL=1` environment variable
+- Backend detects this and exports app instead of calling `app.listen()`
+
+### Frontend Configuration (`frontend/vercel.json`)
+
 ```json
 {
-  "src": "frontend/package.json",
-  "use": "@vercel/static-build",
-  "config": {
-    "distDir": "frontend/dist"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install"
 }
 ```
-- **src**: Frontend package.json location
-- **use**: Static build builder (for Vite/React)
-- **config.distDir**: Output directory after build
 
-### Routes
-Defines how incoming requests are routed:
+**How it works:**
+- `framework`: Vercel recognizes Vite and optimizes deployment
+- `buildCommand`: Compiles React app to static files
+- `outputDirectory`: Where built files are located
+- Static files deployed to Vercel's global CDN
 
-#### API Routes
+---
+
+## Monolithic Deployment Configuration
+
+### Root Configuration (`vercel.json.monolithic`)
+
+**This is the legacy approach.** The file `vercel.json.monolithic` at repository root contains:
+
 ```json
 {
-  "src": "/api/(.*)",
-  "dest": "api/index.ts"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.ts"
+    },
+    {
+      "src": "/(.+\\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico|webp))",
+      "dest": "frontend/dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/dist/index.html"
+    }
+  ],
+  "framework": null,
+  "installCommand": "npm install && npm install --prefix frontend",
+  "buildCommand": "npm run build"
 }
 ```
-- All requests to `/api/*` are sent to the serverless function
-- Handles backend API endpoints
 
-#### Static Assets
-```json
-{
-  "src": "/(.+\\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico|webp))",
-  "dest": "frontend/dist/$1"
-}
-```
-- Static files are served directly from the build output
-- Matches common file extensions
+**How it works:**
+1. **Backend Build**: Compiles `api/index.ts` as serverless function
+2. **Frontend Build**: Builds React app to `frontend/dist/`
+3. **Routing**:
+   - `/api/*` → Backend serverless function
+   - Static files → Direct CDN serving
+   - All else → `index.html` (SPA routing)
 
-#### Catch-All (SPA)
-```json
-{
-  "src": "/(.*)",
-  "dest": "frontend/dist/index.html"
-}
-```
-- All other requests serve the React app's index.html
-- Enables client-side routing (React Router)
+**To use this approach:**
+1. Rename `vercel.json.monolithic` to `vercel.json` at repository root
+2. Create `api/index.ts` that imports `backend/index.ts`
+3. Deploy from repository root
 
-### Build Configuration
-
-```json
-"installCommand": "npm install && npm install --prefix frontend"
-```
-- Installs dependencies for both backend and frontend
-
-```json
-"buildCommand": "npm run build"
-```
-- Runs the build script from root `package.json`
-- Compiles TypeScript backend and builds React frontend
-
-```json
-"outputDirectory": "frontend/dist"
-```
-- Where static files are served from
-
-## How It Works
-
-1. **Deployment Trigger**: Push to Git repository
-2. **Install**: Vercel runs `installCommand`
-3. **Build**: Vercel runs `buildCommand`
-   - Backend: TypeScript compiled to JavaScript in `dist/backend/`
-   - Frontend: Vite builds React app to `frontend/dist/`
-4. **Serverless Function**: `api/index.ts` becomes a serverless function
-5. **Static Hosting**: `frontend/dist/` is served as static files
-6. **Routing**: 
-   - `/api/*` → Serverless function (backend)
-   - Static files → Direct serving
-   - All else → `index.html` (React app)
+---
 
 ## Environment Variables
 
-Environment variables are set in Vercel project settings, not in `vercel.json`.
+Environment variables are set in Vercel project settings, not in configuration files.
 
-Required variables:
-- `MONGO_URI`
-- `JWT_SECRET`
-- `MAILTRAP_TOKEN`
-- `MAILTRAP_ENDPOINT`
-- `GOOGLE_CLIENT_ID`
-- `GOOGLE_CLIENT_SECRET`
-- `GOOGLE_REDIRECT_URI`
-- `CLIENT_URL`
-- `NODE_ENV`
+### Backend Environment Variables
 
-## Serverless Function Limitations
+Required for backend deployment:
+- `MONGO_URI` - MongoDB connection string
+- `JWT_SECRET` - Secret key for JWT tokens
+- `MAILTRAP_TOKEN` - Mailtrap API token
+- `MAILTRAP_ENDPOINT` - Mailtrap API endpoint
+- `GOOGLE_CLIENT_ID` - Google OAuth client ID
+- `GOOGLE_CLIENT_SECRET` - Google OAuth client secret
+- `GOOGLE_REDIRECT_URI` - OAuth callback URL
+- `CLIENT_URL` - Frontend URL for CORS
+- `NODE_ENV` - Set to `production`
+
+### Frontend Environment Variables
+
+Required for frontend deployment:
+- `VITE_API_URL` - Backend API base URL
+
+**See `.env.example` files in `backend/` and `frontend/` directories for details.**
+
+---
+
+## How Backend Adapts to Vercel
+
+The backend code automatically detects Vercel deployment:
+
+```typescript
+// Only serve frontend static files in production for traditional deployment
+// (not when deployed separately to Vercel)
+if (process.env.NODE_ENV === "production" && process.env.VERCEL !== '1') {
+    app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
+    });
+}
+
+// Export app for Vercel serverless
+export default app;
+
+// Only listen when not in serverless environment
+if (process.env.VERCEL !== '1') {
+    app.listen(PORT, () => {
+        connectDB();
+        console.log("Server is running on port: ", PORT);
+    });
+} else {
+    connectDB();
+}
+```
+
+**Key points:**
+- Vercel automatically sets `VERCEL=1` environment variable
+- Backend detects this and skips `app.listen()`
+- In separate deployment, backend doesn't serve frontend files
+- In traditional deployment, backend serves frontend files
+
+---
+
+## Deployment Workflow
+
+### Separate Deployment Workflow
+
+1. **Backend**: Push to GitHub → Vercel detects changes in `backend/` → Deploys serverless functions
+2. **Frontend**: Push to GitHub → Vercel detects changes in `frontend/` → Deploys to CDN
+3. **Independent**: Each can be deployed without affecting the other
+
+### Monolithic Deployment Workflow
+
+1. Push to GitHub → Vercel detects changes
+2. Builds both frontend and backend together
+3. Deploys as single project
+
+---## Serverless Function Limitations
 
 Vercel serverless functions have limitations:
 - **Execution Time**: 10s (Hobby), 60s (Pro), 900s (Enterprise)
