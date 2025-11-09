@@ -29,5 +29,5 @@
   ],
   "framework": null,
   "installCommand": "npm install && npm install --prefix frontend",
-  "buildCommand": "npm run build"
+  "buildCommand": "npm run build:vercel"
 }
