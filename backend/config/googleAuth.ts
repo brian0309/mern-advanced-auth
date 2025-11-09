@@ -38,11 +38,16 @@ const initializeGoogleClient = (): OAuth2Client => {
     }
 
     // Validate and set redirect URI
-    const allowedRedirectUris = [
-        'http://localhost:5000/api/auth/google/callback',
-        // Add your production URI here when deploying
-        // 'https://yourdomain.com/api/auth/google/callback',
-    ];
+    // Allow configuring the list of allowed redirect URIs via an env var:
+    // GOOGLE_ALLOWED_REDIRECT_URIS - a comma-separated list of URIs.
+    const allowedRedirectUrisEnv = process.env.GOOGLE_ALLOWED_REDIRECT_URIS;
+    const allowedRedirectUris = allowedRedirectUrisEnv
+        ? allowedRedirectUrisEnv.split(',').map(u => u.trim()).filter(Boolean)
+        : [
+            'http://localhost:5000/api/auth/google/callback',
+            // For production add your deployed callback URI here or set
+            // GOOGLE_ALLOWED_REDIRECT_URIS in your environment.
+        ];
 
     redirectUri = process.env.GOOGLE_REDIRECT_URI as string;
     
@@ -52,7 +57,8 @@ const initializeGoogleClient = (): OAuth2Client => {
 
     if (!allowedRedirectUris.includes(redirectUri)) {
         console.warn(`Warning: Redirect URI ${redirectUri} not in allowed list. Allowed URIs: ${allowedRedirectUris.join(', ')}`);
-        // In development, we'll allow it with a warning, but log it
+        // In production we still throw to avoid misconfiguration causing silent failures.
+        // Update GOOGLE_ALLOWED_REDIRECT_URIS or set the production URI in the array above.
         if (process.env.NODE_ENV === 'production') {
             throw new Error(`Invalid redirect URI: ${redirectUri}. Must be one of: ${allowedRedirectUris.join(', ')}`);
         }
