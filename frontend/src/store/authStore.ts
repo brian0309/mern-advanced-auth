@@ -1,13 +1,7 @@
 import { create } from "zustand";
 import axios, { AxiosError } from "axios";
 import { AuthStoreState, User } from "../types";
-
-const API_URL =
-	import.meta.env.MODE === "development"
-		? "http://localhost:5000/api/auth"
-		: import.meta.env.VITE_API_URL
-			? import.meta.env.VITE_API_URL
-			: "/api/auth";
+import { API_URL } from "../utils/api";
 
 // Configure axios to send credentials with all requests
 axios.defaults.withCredentials = true;
