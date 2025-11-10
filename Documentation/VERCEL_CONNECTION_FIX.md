@@ -27,11 +27,11 @@ Created a new utility file `frontend/src/utils/api.ts` to centralize API URL log
 ```typescript
 export const getApiUrl = (): string => {
 	if (import.meta.env.MODE === "development") {
-		return "http://localhost:5000/api/auth";
+		return "http://localhost:5000/api";
 	}
 	
 	// In production, prefer VITE_API_URL if set, otherwise use relative path
-	return import.meta.env.VITE_API_URL || "/api/auth";
+	return import.meta.env.VITE_API_URL || "/api";
 };
 
 export const API_URL = getApiUrl();
@@ -45,7 +45,7 @@ Changed the hardcoded URL to use the centralized configuration:
 // ✅ AFTER - Uses environment-aware API_URL
 import { API_URL } from "../utils/api";
 
-const response = await fetch(`${API_URL}/google/url`, {
+const response = await fetch(`${API_URL}/auth/google/url`, {
   method: 'GET',
   credentials: 'include',
 });
@@ -62,16 +62,19 @@ import { API_URL } from "../utils/api";
 ## How It Works
 
 ### Development Mode
-- Automatically uses `http://localhost:5000/api/auth`
+- Automatically uses `http://localhost:5000/api`
+- Auth endpoints accessed via `${API_URL}/auth/...`
 - No environment variables needed for local development
 
 ### Production Mode (Vercel Separate Deployment)
 - Reads `VITE_API_URL` environment variable
-- Example: `VITE_API_URL=https://your-backend.vercel.app/api/auth`
+- Example: `VITE_API_URL=https://your-backend.vercel.app/api`
+- Auth endpoints accessed via `${API_URL}/auth/...`
 - All API calls use this URL
 
 ### Production Mode (Monolithic Deployment)
-- If `VITE_API_URL` is not set, falls back to `/api/auth`
+- If `VITE_API_URL` is not set, falls back to `/api`
+- Auth endpoints accessed via `${API_URL}/auth/...`
 - Works for traditional deployments where frontend and backend are on the same domain
 
 ## Deployment Checklist
@@ -87,12 +90,12 @@ GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/auth/google/callback
 
 ### Frontend Project (Vercel)
 ```bash
-VITE_API_URL=https://your-backend.vercel.app/api/auth
+VITE_API_URL=https://your-backend.vercel.app/api
 ```
 
 ⚠️ **Important Notes:**
-- The `VITE_API_URL` must end with `/api/auth`
-- Do NOT include a trailing slash after `/auth`
+- The `VITE_API_URL` should point to the `/api` base path (not `/api/auth`)
+- Do NOT include a trailing slash after `/api`
 - Variables are case-sensitive
 - Must redeploy after changing environment variables
 
@@ -102,15 +105,17 @@ VITE_API_URL=https://your-backend.vercel.app/api/auth
 ```bash
 cd frontend
 npm run dev
-# Should connect to http://localhost:5000/api/auth
+# Should connect to http://localhost:5000/api
+# Auth endpoints will be at /api/auth
 ```
 
 ### Test Production Build Locally
 ```bash
 cd frontend
-VITE_API_URL=https://your-backend.vercel.app/api/auth npm run build
+VITE_API_URL=https://your-backend.vercel.app/api npm run build
 npm run preview
 # Should connect to your Vercel backend
+# Auth endpoints will be at /api/auth
 ```
 
 ### Test in Browser Console
@@ -142,13 +147,14 @@ console.log(import.meta.env.VITE_API_URL);
 ## Common Mistakes to Avoid
 
 ❌ **Don't:**
-- Use `VITE_API_URL=https://your-backend.vercel.app` (missing `/api/auth`)
-- Use `VITE_API_URL=https://your-backend.vercel.app/api/auth/` (extra trailing slash)
+- Use `VITE_API_URL=https://your-backend.vercel.app` (missing `/api`)
+- Use `VITE_API_URL=https://your-backend.vercel.app/api/` (extra trailing slash)
+- Use `VITE_API_URL=https://your-backend.vercel.app/api/auth` (includes `/auth` - should be in code, not env)
 - Forget to redeploy after changing environment variables
 - Use quotes around values in Vercel environment variables UI
 
 ✅ **Do:**
-- Use exact format: `VITE_API_URL=https://your-backend.vercel.app/api/auth`
+- Use exact format: `VITE_API_URL=https://your-backend.vercel.app/api`
 - Redeploy both frontend and backend after initial setup
 - Verify environment variables in Vercel dashboard
 - Test locally with production build before deploying

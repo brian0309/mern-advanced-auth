@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	signup: async (email: string, password: string, name: string): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ user: User }>(`${API_URL}/signup`, { email, password, name });
+			const response = await axios.post<{ user: User }>(`${API_URL}/auth/signup`, { email, password, name });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
 			const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -34,7 +34,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	login: async (email: string, password: string): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ user: User }>(`${API_URL}/login`, { email, password });
+			const response = await axios.post<{ user: User }>(`${API_URL}/auth/login`, { email, password });
 			set({
 				isAuthenticated: true,
 				user: response.data.user,
@@ -51,7 +51,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	logout: async (): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			await axios.post(`${API_URL}/logout`);
+			await axios.post(`${API_URL}/auth/logout`);
 			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
 		} catch (error) {
 			set({ error: "Error logging out", isLoading: false });
@@ -63,7 +63,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	loginWithGoogle: async (): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.get<{ url: string }>(`${API_URL}/google/url`);
+			const response = await axios.get<{ url: string }>(`${API_URL}/auth/google/url`);
 			if (response.data.url) {
 				window.location.href = response.data.url;
 			}
@@ -87,7 +87,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	verifyEmail: async (code: string): Promise<any> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ user: User }>(`${API_URL}/verify-email`, { code });
+			const response = await axios.post<{ user: User }>(`${API_URL}/auth/verify-email`, { code });
 			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 			return response.data;
 		} catch (error) {
@@ -100,7 +100,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	checkAuth: async (): Promise<void> => {
 		set({ isCheckingAuth: true, error: null });
 		try {
-			const response = await axios.get<{ user: User }>(`${API_URL}/check-auth`);
+			const response = await axios.get<{ user: User }>(`${API_URL}/auth/check-auth`);
 			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
 		} catch (error) {
 			set({ error: null, isCheckingAuth: false, isAuthenticated: false });
@@ -110,7 +110,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	forgotPassword: async (email: string): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ message: string }>(`${API_URL}/forgot-password`, { email });
+			const response = await axios.post<{ message: string }>(`${API_URL}/auth/forgot-password`, { email });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -125,7 +125,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	resetPassword: async (token: string, password: string): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ message: string }>(`${API_URL}/reset-password/${token}`, { password });
+			const response = await axios.post<{ message: string }>(`${API_URL}/auth/reset-password/${token}`, { password });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -140,7 +140,7 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 	changePassword: async (currentPassword: string, newPassword: string): Promise<void> => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post<{ message: string }>(`${API_URL}/change-password`, { currentPassword, newPassword });
+			const response = await axios.post<{ message: string }>(`${API_URL}/auth/change-password`, { currentPassword, newPassword });
 			set({ message: response.data.message, isLoading: false });
 		} catch (error) {
 			const axiosError = error as AxiosError<ApiErrorResponse>;

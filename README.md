@@ -365,6 +365,10 @@ mern-advanced-auth/
 
 ## 🔑 Key API Endpoints
 
+All API endpoints are prefixed with `/api`. Authentication endpoints are under `/api/auth`.
+
+> 📖 **For detailed API structure and how to add new features**, see [API URL Structure Guide](./Documentation/API_URL_STRUCTURE.md)
+
 ### Authentication
 - `POST /api/auth/signup` - Register new user
 - `POST /api/auth/login` - Login user
