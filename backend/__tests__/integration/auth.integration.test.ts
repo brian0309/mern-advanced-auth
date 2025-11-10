@@ -22,6 +22,7 @@ describe('Auth Integration Tests - Complete Flows', () => {
   beforeAll(() => {
     app = express();
     app.use(express.json());
+    // lgtm[js/missing-token-validation] - Test environment only, CSRF not needed for integration tests
     app.use(cookieParser());
     app.use('/api/auth', authRoutes);
 

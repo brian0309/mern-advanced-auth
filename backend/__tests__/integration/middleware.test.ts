@@ -28,6 +28,7 @@ describe('Middleware Integration Tests', () => {
       const userId = '507f1f77bcf86cd799439011';
       const token = jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-valid', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({
           success: true,
@@ -45,6 +46,7 @@ describe('Middleware Integration Tests', () => {
     });
 
     it('should reject access without token', async () => {
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-no-token', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       });
@@ -58,6 +60,7 @@ describe('Middleware Integration Tests', () => {
     });
 
     it('should reject access with invalid token', async () => {
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-invalid', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       });
@@ -78,6 +81,7 @@ describe('Middleware Integration Tests', () => {
       // Wait a bit to ensure expiration
       await new Promise(resolve => setTimeout(resolve, 100));
 
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-expired', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       });
@@ -95,6 +99,7 @@ describe('Middleware Integration Tests', () => {
       const userId = '507f1f77bcf86cd799439011';
       const wrongToken = jwt.sign({ userId }, 'wrong-secret', { expiresIn: '7d' });
 
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-wrong-secret', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       });
@@ -109,6 +114,7 @@ describe('Middleware Integration Tests', () => {
     });
 
     it('should handle malformed tokens', async () => {
+      // lgtm[js/missing-rate-limiting] - Test route only, rate limiting not needed
       app.get('/test/protected-malformed', verifyToken, (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       });
