@@ -212,7 +212,7 @@ Deploy to traditional hosting platforms like Heroku, Render, Railway, DigitalOce
 2. **Connect your GitHub repository**
 
 3. **Configure Build Settings**
-   - **Build Command**: `npm run build`
+   - **Build Command**: `npm run build:render`
    - **Start Command**: `npm start`
    - **Environment**: Node
 
