@@ -15,17 +15,17 @@ import { verifyToken } from "../middleware/verifyToken.js";
 const router: Router = express.Router();
 
 // Google OAuth routes
-router.get("/google/url", getGoogleAuthUrl);
-router.get("/google/callback", googleAuthCallback);
+router.get("/auth/google/url", getGoogleAuthUrl);
+router.get("/auth/google/callback", googleAuthCallback);
 
 // Regular auth routes
-router.get("/check-auth", verifyToken, checkAuth);
-router.post("/signup", signup);
-router.post("/login", login);
-router.post("/logout", logout);
-router.post("/verify-email", verifyEmail);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
-router.post("/change-password", verifyToken, changePassword);
+router.get("/auth/check-auth", verifyToken, checkAuth);
+router.post("/auth/signup", signup);
+router.post("/auth/login", login);
+router.post("/auth/logout", logout);
+router.post("/auth/verify-email", verifyEmail);
+router.post("/auth/forgot-password", forgotPassword);
+router.post("/auth/reset-password/:token", resetPassword);
+router.post("/auth/change-password", verifyToken, changePassword);
 
 export default router;

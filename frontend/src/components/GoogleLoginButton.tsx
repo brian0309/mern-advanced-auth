@@ -33,7 +33,7 @@ const GoogleLoginButton: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       // This will trigger the backend to generate the Google OAuth URL
-      const response = await fetch(`${API_URL}/google/url`, {
+      const response = await fetch(`${API_URL}/auth/google/url`, {
         method: 'GET',
         credentials: 'include', // This is crucial - allows cookies to be set and sent
       });
