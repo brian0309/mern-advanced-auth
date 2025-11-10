@@ -100,11 +100,27 @@ The test suite covers:
   - Indexes
 
 ### Integration Tests
-- ✅ **auth.routes.ts**
-  - Complete API endpoint testing
-  - Request/response validation
-  - Cookie handling
-  - Authentication flow
+- ✅ **auth.integration.test.ts** (19 tests)
+  - Complete signup flow
+  - Login/logout cycles
+  - Email verification
+  - Password reset workflow
+  - Protected routes (check-auth, change-password)
+  - Error handling
+  - Data sanitization
+
+- ✅ **middleware.test.ts** (18 tests)
+  - Token verification middleware
+  - Middleware chain execution
+  - Request/response processing
+  - Cookie management
+  - HTTP methods and parameters
+  - Error handling
+
+- ✅ **auth.routes.test.ts** (12 tests)
+  - Route definitions
+  - HTTP endpoint configuration
+  - Route structure validation
 
 ## Test Utilities
 
