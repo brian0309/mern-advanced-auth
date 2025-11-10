@@ -119,7 +119,7 @@ This repository supports **two deployment strategies**:
 
    ```bash
    # Backend API URL (use your actual backend URL from Step 1)
-   VITE_API_URL=https://mern-auth-backend.vercel.app/api/auth
+   VITE_API_URL=https://mern-auth-backend.vercel.app/api
    ```
 
 4. **Deploy Frontend**
@@ -213,7 +213,7 @@ See `frontend/.env.example`:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `VITE_API_URL` | Backend API base URL | `https://your-backend.vercel.app/api/auth` |
+| `VITE_API_URL` | Backend API base URL | `https://your-backend.vercel.app/api` |
 
 ---
 
@@ -318,9 +318,9 @@ Both projects redeploy automatically!
 
 **Solutions:**
 1. Check `VITE_API_URL` in frontend environment variables
-2. Make sure it includes `/api/auth` at the end
-   - ✅ Correct: `https://your-backend.vercel.app/api/auth`
-   - ❌ Wrong: `https://your-backend.vercel.app/api/auth/`
+2. Make sure it points to the `/api` endpoint (without `/auth`)
+   - ✅ Correct: `https://your-backend.vercel.app/api`
+   - ❌ Wrong: `https://your-backend.vercel.app/api/`
    - ❌ Wrong: `https://your-backend.vercel.app`
 3. Verify backend is deployed and working (visit backend URL)
 4. Check browser console for CORS or network errors

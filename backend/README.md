@@ -85,6 +85,8 @@ See [DEPLOYMENT.md](../Documentation/Deployment/DEPLOYMENT.md) for instructions.
 
 ## API Endpoints
 
+All API endpoints are prefixed with `/api`. Authentication endpoints are under `/api/auth`.
+
 ### Authentication
 - `POST /api/auth/signup` - Register new user
 - `POST /api/auth/login` - Login user

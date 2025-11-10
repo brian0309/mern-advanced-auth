@@ -164,7 +164,7 @@ NODE_ENV=production
 
 ### Frontend (.env in frontend/ or Vercel settings)
 ```bash
-VITE_API_URL=https://backend.vercel.app/api/auth
+VITE_API_URL=https://backend.vercel.app/api
 ```
 
 ## Testing
