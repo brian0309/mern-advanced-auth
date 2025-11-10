@@ -33,7 +33,7 @@ This repository supports **two deployment strategies**:
 
 ### Deploy Backend
 
-[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,CLIENT_URL,NODE_ENV)
+[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_ALLOWED_REDIRECT_URIS,ALLOWED_ORIGINS,CLIENT_URL,COOKIE_DOMAIN,NODE_ENV)
 
 ### Deploy Frontend
 
@@ -85,11 +85,21 @@ This repository supports **two deployment strategies**:
    # Google OAuth
    GOOGLE_CLIENT_ID=your_client_id.apps.googleusercontent.com
    GOOGLE_CLIENT_SECRET=your_client_secret
-   
-   # Will update these after getting Vercel URLs
+
+   # OAuth redirect URIs (single callback and allowed redirect list)
    GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/auth/google/callback
-   CLIENT_URL=https://your-frontend.vercel.app
+   GOOGLE_ALLOWED_REDIRECT_URIS=https://your-frontend.vercel.app/oauth-redirect,https://your-frontend.vercel.app
    
+   # Comma-separated list of frontend origins that are allowed to call the backend (preferred)
+   # Example: ALLOWED_ORIGINS=https://your-frontend.vercel.app,https://preview-123.onvercel.app
+   ALLOWED_ORIGINS=https://your-frontend.vercel.app
+
+   # Frontend URL (kept for backward compatibility; prefer ALLOWED_ORIGINS)
+   CLIENT_URL=https://your-frontend.vercel.app
+
+   # Optional: cookie domain to scope auth cookie (omit for default)
+   COOKIE_DOMAIN=yourdomain.com
+
    # Environment
    NODE_ENV=production
    ```
@@ -137,7 +147,12 @@ Now that you have both URLs, update the backend environment variables:
 
 2. **Update These Variables**
 
-   Update `CLIENT_URL`:
+   Update `ALLOWED_ORIGINS` (preferred):
+   ```
+   ALLOWED_ORIGINS=https://mern-auth-frontend.vercel.app
+   ```
+
+   (Optional) `CLIENT_URL` — kept for backward compatibility:
    ```
    CLIENT_URL=https://mern-auth-frontend.vercel.app
    ```
@@ -204,8 +219,11 @@ See `backend/.env.example` for the complete list:
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | From Google Cloud Console |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | From Google Cloud Console |
 | `GOOGLE_REDIRECT_URI` | OAuth callback URL | `https://your-backend.vercel.app/api/auth/google/callback` |
-| `CLIENT_URL` | Frontend URL for CORS | `https://your-frontend.vercel.app` |
+| `ALLOWED_ORIGINS` | Comma-separated list of allowed frontend origins (preferred for CORS). Include all preview and production origins. | `https://your-frontend.vercel.app,https://preview-123.onvercel.app` |
+| `CLIENT_URL` | Frontend URL for CORS (deprecated — use `ALLOWED_ORIGINS` instead) | `https://your-frontend.vercel.app` |
 | `NODE_ENV` | Environment mode | `production` |
+| `GOOGLE_ALLOWED_REDIRECT_URIS` | Comma-separated list of allowed redirect URIs used by the frontend (for front-end initiated OAuth) | `https://your-frontend.vercel.app/oauth-redirect,https://your-frontend.vercel.app` |
+| `COOKIE_DOMAIN` | Optional cookie domain used when setting the auth cookie (omit to use default host) | `yourdomain.com` |
 
 ### Frontend Environment Variables
 
@@ -251,9 +269,10 @@ See `frontend/.env.example`:
    - Connects to MongoDB Atlas
 
 3. **Authentication**
-   - JWT tokens in HTTP-only cookies
-   - CORS configured for frontend domain
-   - Secure cross-origin requests
+   - JWT tokens are stored in an HTTP-only cookie named `token` (see `backend/utils/generateTokenAndSetCookie.ts`)
+   - `COOKIE_DOMAIN` can be used to scope the cookie to a custom domain
+   - `NODE_ENV` controls `secure` and `sameSite` cookie options (production sets `sameSite='none'` and `secure=true`)
+   - CORS is configured to allow requests from `CLIENT_URL`
 
 ---
 
