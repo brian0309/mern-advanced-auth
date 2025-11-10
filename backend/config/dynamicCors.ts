@@ -26,6 +26,8 @@ export const getCorsOptions = (): CorsOptions => {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+  // track origins we've warned about to avoid log spam
+  const warnedOrigins = new Set<string>();
 
   return {
     // origin can be a function to dynamically decide whether to allow the request
@@ -48,8 +50,21 @@ export const getCorsOptions = (): CorsOptions => {
         }
       }
 
-      // Deny all other origins
-      return callback(new Error("CORS origin denied"), false);
+      // Instead of throwing an Error into the CORS callback (which becomes an uncaught
+      // error in some setups), log an actionable message once and deny the origin
+      // gracefully by calling callback(null, false).
+      if (!warnedOrigins.has(incomingOrigin)) {
+        warnedOrigins.add(incomingOrigin);
+        console.warn(
+          `[CORS] Denied origin: ${incomingOrigin}. To allow it, set ALLOWED_ORIGINS (or CLIENT_URL) to include this origin.`
+        );
+        console.info(`[CORS] Current allowed origins: ${allowedOrigins.join(", ")}`);
+        console.info(
+          `[CORS] Example (dev): export ALLOWED_ORIGINS="http://localhost:5173,http://localhost:3000"`
+        );
+      }
+
+      return callback(null, false);
     },
     credentials: true,
   };
