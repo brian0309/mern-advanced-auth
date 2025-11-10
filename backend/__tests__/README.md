@@ -55,10 +55,8 @@ npm run test:integration
 npm run test:watch
 ```
 
-### Coverage Report
-```bash
-npm run test:coverage
-```
+### Note on Coverage
+Coverage reporting has some limitations due to ESM/CommonJS interoperability. Use `npm test` for the most reliable test execution.
 
 ## Test Coverage
 

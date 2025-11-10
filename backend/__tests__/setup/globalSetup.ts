@@ -1,4 +1,4 @@
-import { connectTestDb, clearTestDb, disconnectTestDb } from './testDb';
+import { setupMockDb, clearMockDb, teardownMockDb } from './mockDb';
 
 // Set test environment variables
 process.env.NODE_ENV = 'test';
@@ -8,14 +8,14 @@ process.env.MONGO_URI = 'mongodb://localhost:27017/test';
 
 export const setupTests = () => {
   beforeAll(async () => {
-    await connectTestDb();
+    setupMockDb();
   });
 
   afterEach(async () => {
-    await clearTestDb();
+    clearMockDb();
   });
 
   afterAll(async () => {
-    await disconnectTestDb();
+    teardownMockDb();
   });
 };
