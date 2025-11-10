@@ -103,6 +103,54 @@ describe('Auth Integration Tests - Complete Flows', () => {
       expect(res.body.success).toBe(false);
       expect(res.body.message).toContain('All fields are required');
     });
+
+    it('should reject signup with invalid email format (no TLD)', async () => {
+      mockUserModel.findOne.mockResolvedValue(null);
+
+      const res = await request(app)
+        .post('/api/auth/signup')
+        .send({
+          email: 'thisis@invalid',
+          password: 'Password123!',
+          name: 'Test User',
+        })
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('valid email address');
+    });
+
+    it('should reject signup with invalid email format (missing @)', async () => {
+      mockUserModel.findOne.mockResolvedValue(null);
+
+      const res = await request(app)
+        .post('/api/auth/signup')
+        .send({
+          email: 'invalidemail.com',
+          password: 'Password123!',
+          name: 'Test User',
+        })
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('valid email address');
+    });
+
+    it('should reject signup with invalid email format (missing domain)', async () => {
+      mockUserModel.findOne.mockResolvedValue(null);
+
+      const res = await request(app)
+        .post('/api/auth/signup')
+        .send({
+          email: 'user@',
+          password: 'Password123!',
+          name: 'Test User',
+        })
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('valid email address');
+    });
   });
 
   describe('Login Flow', () => {
@@ -190,6 +238,19 @@ describe('Auth Integration Tests - Complete Flows', () => {
       expect(res.body.success).toBe(false);
       expect(res.body.message).toBe('Please use Google OAuth to login');
     });
+
+    it('should reject login with invalid email format', async () => {
+      const res = await request(app)
+        .post('/api/auth/login')
+        .send({
+          email: 'invalid@email',
+          password: 'Password123!',
+        })
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('valid email address');
+    });
   });
 
   describe('Email Verification Flow', () => {
@@ -268,6 +329,16 @@ describe('Auth Integration Tests - Complete Flows', () => {
 
       expect(res.body.success).toBe(false);
       expect(res.body.message).toBe('User not found');
+    });
+
+    it('should reject forgot password with invalid email format', async () => {
+      const res = await request(app)
+        .post('/api/auth/forgot-password')
+        .send({ email: 'invalid@email' })
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('valid email address');
     });
 
     it('should successfully reset password with valid token', async () => {

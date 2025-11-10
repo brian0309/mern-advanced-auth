@@ -1,12 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 import { IUserDocument } from "../types/user.types.js";
 
+// Email validation regex - requires proper domain with TLD
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const userSchema = new Schema<IUserDocument>(
 	{
 		email: {
 			type: String,
 			required: function(this: IUserDocument) { return !this.googleId; },
 			unique: true,
+			validate: {
+				validator: function(email: string) {
+					return emailRegex.test(email);
+				},
+				message: 'Please enter a valid email address with a proper domain'
+			}
 		},
 		password: {
 			type: String,
