@@ -113,7 +113,7 @@ Your local development environment continues to work exactly as before. **No cha
      MONGO_URI=mongodb://localhost:27017/auth-app
      JWT_SECRET=your_local_secret
      CLIENT_URL=http://localhost:5173
-     GOOGLE_REDIRECT_URI=http://localhost:5000/api/google/callback
+     GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
      # ... other variables
      ```
 
@@ -191,7 +191,7 @@ Deploy to traditional hosting platforms like Heroku, Render, Railway, DigitalOce
    heroku config:set MAILTRAP_ENDPOINT="https://send.api.mailtrap.io/"
    heroku config:set GOOGLE_CLIENT_ID="your_google_client_id"
    heroku config:set GOOGLE_CLIENT_SECRET="your_google_client_secret"
-   heroku config:set GOOGLE_REDIRECT_URI="https://your-app-name.herokuapp.com/api/google/callback"
+   heroku config:set GOOGLE_REDIRECT_URI="https://your-app-name.herokuapp.com/api/auth/google/callback"
    heroku config:set CLIENT_URL="https://your-app-name.herokuapp.com"
    heroku config:set NODE_ENV="production"
    ```
@@ -203,7 +203,7 @@ Deploy to traditional hosting platforms like Heroku, Render, Railway, DigitalOce
 
 7. **Update Google OAuth**
    - Add `https://your-app-name.herokuapp.com` to authorized origins
-   - Add `https://your-app-name.herokuapp.com/api/google/callback` to redirect URIs
+   - Add `https://your-app-name.herokuapp.com/api/auth/google/callback` to redirect URIs
 
 ### Render Deployment
 
@@ -312,7 +312,7 @@ MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 # Google OAuth 2.0
 GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/google/callback
+GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/auth/google/callback
 
 # Frontend URL (your Vercel deployment URL)
 CLIENT_URL=https://your-app.vercel.app
@@ -381,7 +381,7 @@ After your first deployment, you need to update Google OAuth credentials:
      ```
    - Add to "Authorized redirect URIs":
      ```
-     https://your-app.vercel.app/api/google/callback
+     https://your-app.vercel.app/api/auth/google/callback
      ```
    - Click "Save"
 
@@ -389,7 +389,7 @@ After your first deployment, you need to update Google OAuth credentials:
    - Go to your Vercel project settings
    - Update these variables with your actual deployment URL:
      ```
-     GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/google/callback
+     GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/auth/google/callback
      CLIENT_URL=https://your-app.vercel.app
      ```
 
@@ -507,7 +507,7 @@ To add a custom domain to your Vercel deployment:
 4. Update DNS settings as instructed by Vercel
 5. Update environment variables:
    ```
-   GOOGLE_REDIRECT_URI=https://yourdomain.com/api/google/callback
+   GOOGLE_REDIRECT_URI=https://yourdomain.com/api/auth/google/callback
    CLIENT_URL=https://yourdomain.com
    ```
 6. Update Google OAuth credentials with new domain

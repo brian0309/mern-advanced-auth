@@ -22,13 +22,13 @@ Frontend runs on `http://localhost:5173`
 
 ### Environment Variables
 
-For **local development**, no environment variables needed. The frontend automatically uses `http://localhost:5000/api` as the API URL.
+For **local development**, no environment variables needed. The frontend automatically uses `http://localhost:5000/api/auth` as the API URL.
 
 For **production/Vercel deployment**, create a `.env` file in this directory:
 
 ```bash
 # Backend API URL (your deployed backend URL)
-VITE_API_URL=https://your-backend.vercel.app/api
+VITE_API_URL=https://your-backend.vercel.app/api/auth
 ```
 
 See `.env.example` in this directory for reference.
@@ -145,15 +145,15 @@ The frontend automatically configures the API URL based on the environment:
 ```typescript
 const API_URL =
     import.meta.env.MODE === "development"
-        ? "http://localhost:5000/api"
+        ? "http://localhost:5000/api/auth"
         : import.meta.env.VITE_API_URL
             ? import.meta.env.VITE_API_URL
-            : "/api";
+            : "/api/auth";
 ```
 
-- **Development**: Uses `http://localhost:5000/api`
+- **Development**: Uses `http://localhost:5000/api/auth`
 - **Production with VITE_API_URL**: Uses the configured URL (for separate deployment)
-- **Production without VITE_API_URL**: Uses relative `/api` (for monolithic deployment)
+- **Production without VITE_API_URL**: Uses relative `/api/auth` (for monolithic deployment)
 
 ## Technologies
 
@@ -225,7 +225,7 @@ No environment variables needed for local development.
 ### Production (Separate Deployment)
 
 Required:
-- `VITE_API_URL` - Backend API URL (e.g., `https://your-backend.vercel.app/api`)
+- `VITE_API_URL` - Backend API URL (e.g., `https://your-backend.vercel.app/api/auth`)
 
 ### Production (Monolithic Deployment)
 

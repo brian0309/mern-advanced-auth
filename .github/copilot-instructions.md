@@ -10,7 +10,7 @@ This repo is a full-stack MERN authentication example (TypeScript). The goal of 
 - Important runtime contracts & examples (use these verbatim when editing/instrumenting code)
   - Auth token cookie name: `token` (set by `backend/utils/generateTokenAndSetCookie.ts`). Payload: `{ userId }` signed with `JWT_SECRET` and 7d expiry.
   - Protected routes expect cookie-based JWT: middleware `backend/middleware/verifyToken.ts` reads `req.cookies.token` and sets `req.userId`.
-  - OAuth endpoints: `GET /api/google/url` and `GET /api/google/callback` (controllers in `backend/controllers/googleAuth.controller.ts`).
+  - OAuth endpoints: `GET /api/auth/google/url` and `GET /api/auth/google/callback` (controllers in `backend/controllers/googleAuth.controller.ts`).
   - Email verification and password reset tokens are stored on the User model (see `backend/models/user.model.ts`) with expiry fields and indexes.
 
 - Dev / test / build commands (from repo READMEs)
@@ -34,7 +34,7 @@ This repo is a full-stack MERN authentication example (TypeScript). The goal of 
 
 - Editing guidance for PRs and changes
   - When changing auth cookie behavior, update both `generateTokenAndSetCookie.ts` and `verifyToken.ts` and add tests covering cookie options (dev vs production). Use the same cookie name `token` for backward compatibility.
-  - If adding endpoints that will be called from the frontend, update frontend API URL handling (`frontend` uses `VITE_API_URL` / relative `/api`) and ensure CORS/credentials are configured.
+  - If adding endpoints that will be called from the frontend, update frontend API URL handling (`frontend` uses `VITE_API_URL` / relative `/api/auth`) and ensure CORS/credentials are configured.
   - For deployment changes, remember the two deployment modes: monolithic (backend serves `frontend/dist`) vs separate Vercel projects. Keep `VERCEL` checks in `backend/index.ts` in mind when modifying server startup.
 
 - Quick places to look for examples

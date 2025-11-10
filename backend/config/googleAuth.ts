@@ -46,7 +46,7 @@ const initializeGoogleClient = (): OAuth2Client => {
         throw new Error(
             'GOOGLE_ALLOWED_REDIRECT_URIS environment variable is required. ' +
             'Set it to a comma-separated list of allowed redirect URIs ' +
-            '(e.g., http://localhost:5000/api/google/callback,https://your-backend.vercel.app/api/google/callback)'
+            '(e.g., http://localhost:5000/api/auth/google/callback,https://your-backend.vercel.app/api/auth/google/callback)'
         );
     }
     

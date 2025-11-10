@@ -39,8 +39,8 @@ MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 # Google OAuth 2.0
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=http://localhost:5000/api/google/callback
-GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/google/callback
+GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/auth/google/callback
 
 # Frontend URL
 CLIENT_URL=http://localhost:5173
@@ -86,18 +86,18 @@ See [DEPLOYMENT.md](../Documentation/Deployment/DEPLOYMENT.md) for instructions.
 ## API Endpoints
 
 ### Authentication
-- `POST /api/signup` - Register new user
-- `POST /api/login` - Login user
-- `POST /api/logout` - Logout user
-- `GET /api/check-auth` - Verify authentication
-- `POST /api/verify-email` - Verify email with code
-- `POST /api/forgot-password` - Request password reset
-- `POST /api/reset-password/:token` - Reset password
-- `POST /api/change-password` - Change password (protected)
+- `POST /api/auth/signup` - Register new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/logout` - Logout user
+- `GET /api/auth/check-auth` - Verify authentication
+- `POST /api/auth/verify-email` - Verify email with code
+- `POST /api/auth/forgot-password` - Request password reset
+- `POST /api/auth/reset-password/:token` - Reset password
+- `POST /api/auth/change-password` - Change password (protected)
 
 ### Google OAuth
-- `GET /api/google/url` - Get Google OAuth URL
-- `GET /api/google/callback` - Handle Google OAuth callback
+- `GET /api/auth/google/url` - Get Google OAuth URL
+- `GET /api/auth/google/callback` - Handle Google OAuth callback
 
 ## Project Structure
 

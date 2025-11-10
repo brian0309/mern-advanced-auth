@@ -43,7 +43,7 @@ cd frontend && npm run dev   # Terminal 2: Frontend with hot-reload
 **Environment Variables:**
 - `NODE_ENV=development`
 - `CLIENT_URL=http://localhost:5173`
-- `GOOGLE_REDIRECT_URI=http://localhost:5000/api/google/callback`
+- `GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback`
 
 ---
 
@@ -92,7 +92,7 @@ if (process.env.NODE_ENV === "production") {
 **Environment Variables:**
 - `NODE_ENV=production`
 - `CLIENT_URL=https://your-app.platform.com`
-- `GOOGLE_REDIRECT_URI=https://your-app.platform.com/api/google/callback`
+- `GOOGLE_REDIRECT_URI=https://your-app.platform.com/api/auth/google/callback`
 
 ---
 
@@ -145,7 +145,7 @@ if (process.env.VERCEL !== '1') {
 - `NODE_ENV=production`
 - `VERCEL=1` (automatically set)
 - `CLIENT_URL=https://your-app.vercel.app`
-- `GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/google/callback`
+- `GOOGLE_REDIRECT_URI=https://your-app.vercel.app/api/auth/google/callback`
 
 ---
 

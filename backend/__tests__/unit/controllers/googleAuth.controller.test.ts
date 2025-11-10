@@ -6,8 +6,8 @@ process.env.CLIENT_URL = 'http://localhost:3000';
 process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
 process.env.GOOGLE_CLIENT_ID = 'test-client-id';
 process.env.GOOGLE_CLIENT_SECRET = 'test-secret';
-process.env.GOOGLE_REDIRECT_URI = 'http://localhost:5000/api/google/callback';
-process.env.GOOGLE_ALLOWED_REDIRECT_URIS = 'http://localhost:5000/api/google/callback';
+process.env.GOOGLE_REDIRECT_URI = 'http://localhost:5000/api/auth/google/callback';
+process.env.GOOGLE_ALLOWED_REDIRECT_URIS = 'http://localhost:5000/api/auth/google/callback';
 
 // Mock dependencies
 jest.mock('../../../config/googleAuth');

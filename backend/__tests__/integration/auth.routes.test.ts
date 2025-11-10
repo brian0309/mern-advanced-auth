@@ -26,56 +26,56 @@ describe('Auth Routes Integration', () => {
     });
 
     it('should define signup route', () => {
-      // POST /api/signup
+      // POST /api/auth/signup
       const hasSignupRoute = true;
       expect(hasSignupRoute).toBe(true);
     });
 
     it('should define login route', () => {
-      // POST /api/login
+      // POST /api/auth/login
       const hasLoginRoute = true;
       expect(hasLoginRoute).toBe(true);
     });
 
     it('should define logout route', () => {
-      // POST /api/logout
+      // POST /api/auth/logout
       const hasLogoutRoute = true;
       expect(hasLogoutRoute).toBe(true);
     });
 
     it('should define verify-email route', () => {
-      // POST /api/verify-email
+      // POST /api/auth/verify-email
       const hasVerifyRoute = true;
       expect(hasVerifyRoute).toBe(true);
     });
 
     it('should define forgot-password route', () => {
-      // POST /api/forgot-password
+      // POST /api/auth/forgot-password
       const hasForgotRoute = true;
       expect(hasForgotRoute).toBe(true);
     });
 
     it('should define reset-password route', () => {
-      // POST /api/reset-password/:token
+      // POST /api/auth/reset-password/:token
       const hasResetRoute = true;
       expect(hasResetRoute).toBe(true);
     });
 
     it('should define check-auth route', () => {
-      // GET /api/check-auth
+      // GET /api/auth/check-auth
       const hasCheckAuthRoute = true;
       expect(hasCheckAuthRoute).toBe(true);
     });
 
     it('should define change-password route', () => {
-      // POST /api/change-password
+      // POST /api/auth/change-password
       const hasChangePasswordRoute = true;
       expect(hasChangePasswordRoute).toBe(true);
     });
 
     it('should define Google OAuth routes', () => {
-      // GET /api/google/url
-      // GET /api/google/callback
+      // GET /api/auth/google/url
+      // GET /api/auth/google/callback
       const hasGoogleRoutes = true;
       expect(hasGoogleRoutes).toBe(true);
     });

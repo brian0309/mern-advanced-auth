@@ -157,14 +157,14 @@ MAILTRAP_TOKEN=your_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 GOOGLE_CLIENT_ID=your_client_id
 GOOGLE_CLIENT_SECRET=your_secret
-GOOGLE_REDIRECT_URI=https://backend.vercel.app/api/google/callback
+GOOGLE_REDIRECT_URI=https://backend.vercel.app/api/auth/google/callback
 CLIENT_URL=https://frontend.vercel.app
 NODE_ENV=production
 ```
 
 ### Frontend (.env in frontend/ or Vercel settings)
 ```bash
-VITE_API_URL=https://backend.vercel.app/api
+VITE_API_URL=https://backend.vercel.app/api/auth
 ```
 
 ## Testing
