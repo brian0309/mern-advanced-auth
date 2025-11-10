@@ -4,6 +4,7 @@ import { createMockRequest, createMockResponse } from '../../helpers/testHelpers
 // Set environment first
 process.env.JWT_SECRET = 'test-jwt-secret-key-for-testing';
 process.env.CLIENT_URL = 'http://localhost:3000';
+process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
 
 // Mock dependencies
 jest.mock('../../../models/user.model');

@@ -6,12 +6,22 @@ import { CorsOptions } from "cors";
  * Vercel while keeping CORS restrictive for unknown origins.
  *
  * Environment variables used:
+ * - ALLOWED_ORIGINS: comma-separated list of allowed origins
+ *                    (e.g. https://your-app.vercel.app,https://preview-123.vercel.app)
+ *                    If not set, falls back to CLIENT_URL for backward compatibility
  * - CLIENT_URL: primary frontend URL (e.g. https://your-app.vercel.app)
- * - ALLOWED_ORIGINS: optional comma-separated list of allowed origins
- *                    (e.g. https://team-a-preview.vercel.app,https://team-b-preview.vercel.app)
+ *               Used as fallback if ALLOWED_ORIGINS is not set
  */
 export const getCorsOptions = (): CorsOptions => {
-  const envList = process.env.ALLOWED_ORIGINS || process.env.CLIENT_URL || "http://localhost:5173";
+  const envList = process.env.ALLOWED_ORIGINS || process.env.CLIENT_URL || "";
+  
+  if (!envList) {
+    throw new Error(
+      "CORS configuration error: Either ALLOWED_ORIGINS or CLIENT_URL environment variable must be set. " +
+      "Set ALLOWED_ORIGINS to a comma-separated list of allowed origins (e.g., http://localhost:5173,https://your-app.com)"
+    );
+  }
+  
   const allowedOrigins = envList
     .split(",")
     .map((s) => s.trim())
