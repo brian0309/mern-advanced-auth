@@ -87,7 +87,7 @@ This repository supports **two deployment strategies**:
    GOOGLE_CLIENT_SECRET=your_client_secret
    
    # Will update these after getting Vercel URLs
-   GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/auth/google/callback
+   GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/google/callback
    CLIENT_URL=https://your-frontend.vercel.app
    
    # Environment
@@ -119,7 +119,7 @@ This repository supports **two deployment strategies**:
 
    ```bash
    # Backend API URL (use your actual backend URL from Step 1)
-   VITE_API_URL=https://mern-auth-backend.vercel.app/api/auth
+   VITE_API_URL=https://mern-auth-backend.vercel.app/api
    ```
 
 4. **Deploy Frontend**
@@ -144,7 +144,7 @@ Now that you have both URLs, update the backend environment variables:
 
    Update `GOOGLE_REDIRECT_URI`:
    ```
-   GOOGLE_REDIRECT_URI=https://mern-auth-backend.vercel.app/api/auth/google/callback
+   GOOGLE_REDIRECT_URI=https://mern-auth-backend.vercel.app/api/google/callback
    ```
 
 3. **Redeploy Backend**
@@ -170,7 +170,7 @@ Update your Google Cloud Console OAuth settings:
 
 4. **Add Authorized Redirect URIs**
    ```
-   https://mern-auth-backend.vercel.app/api/auth/google/callback
+   https://mern-auth-backend.vercel.app/api/google/callback
    ```
 
 5. **Save Changes**
@@ -203,7 +203,7 @@ See `backend/.env.example` for the complete list:
 | `MAILTRAP_ENDPOINT` | Mailtrap API endpoint | `https://send.api.mailtrap.io/` |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | From Google Cloud Console |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | From Google Cloud Console |
-| `GOOGLE_REDIRECT_URI` | OAuth callback URL | `https://your-backend.vercel.app/api/auth/google/callback` |
+| `GOOGLE_REDIRECT_URI` | OAuth callback URL | `https://your-backend.vercel.app/api/google/callback` |
 | `CLIENT_URL` | Frontend URL for CORS | `https://your-frontend.vercel.app` |
 | `NODE_ENV` | Environment mode | `production` |
 
@@ -213,7 +213,7 @@ See `frontend/.env.example`:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `VITE_API_URL` | Backend API base URL | `https://your-backend.vercel.app/api/auth` |
+| `VITE_API_URL` | Backend API base URL | `https://your-backend.vercel.app/api` |
 
 ---
 
@@ -245,7 +245,7 @@ See `frontend/.env.example`:
    - Served from Vercel's global CDN
    - Ultra-fast loading worldwide
 
-2. **API Requests** (`/api/auth/*`)
+2. **API Requests** (`/api/*`)
    - Frontend calls backend URL
    - Serverless functions handle requests
    - Connects to MongoDB Atlas
@@ -318,9 +318,9 @@ Both projects redeploy automatically!
 
 **Solutions:**
 1. Check `VITE_API_URL` in frontend environment variables
-2. Make sure it includes `/api/auth` at the end
-   - ✅ Correct: `https://your-backend.vercel.app/api/auth`
-   - ❌ Wrong: `https://your-backend.vercel.app/api/auth/`
+2. Make sure it includes `/api` at the end
+   - ✅ Correct: `https://your-backend.vercel.app/api`
+   - ❌ Wrong: `https://your-backend.vercel.app/api/`
    - ❌ Wrong: `https://your-backend.vercel.app`
 3. Verify backend is deployed and working (visit backend URL)
 4. Check browser console for CORS or network errors

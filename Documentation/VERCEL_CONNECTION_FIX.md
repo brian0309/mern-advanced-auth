@@ -10,7 +10,7 @@ The issue was a **hardcoded localhost URL** in `frontend/src/components/GoogleLo
 
 ```typescript
 // ❌ BEFORE - Hardcoded localhost URL
-const response = await fetch('http://localhost:5000/api/auth/google/url', {
+const response = await fetch('http://localhost:5000/api/google/url', {
   method: 'GET',
   credentials: 'include',
 });
@@ -27,11 +27,11 @@ Created a new utility file `frontend/src/utils/api.ts` to centralize API URL log
 ```typescript
 export const getApiUrl = (): string => {
 	if (import.meta.env.MODE === "development") {
-		return "http://localhost:5000/api/auth";
+		return "http://localhost:5000/api";
 	}
 	
 	// In production, prefer VITE_API_URL if set, otherwise use relative path
-	return import.meta.env.VITE_API_URL || "/api/auth";
+	return import.meta.env.VITE_API_URL || "/api";
 };
 
 export const API_URL = getApiUrl();
@@ -62,16 +62,16 @@ import { API_URL } from "../utils/api";
 ## How It Works
 
 ### Development Mode
-- Automatically uses `http://localhost:5000/api/auth`
+- Automatically uses `http://localhost:5000/api`
 - No environment variables needed for local development
 
 ### Production Mode (Vercel Separate Deployment)
 - Reads `VITE_API_URL` environment variable
-- Example: `VITE_API_URL=https://your-backend.vercel.app/api/auth`
+- Example: `VITE_API_URL=https://your-backend.vercel.app/api`
 - All API calls use this URL
 
 ### Production Mode (Monolithic Deployment)
-- If `VITE_API_URL` is not set, falls back to `/api/auth`
+- If `VITE_API_URL` is not set, falls back to `/api`
 - Works for traditional deployments where frontend and backend are on the same domain
 
 ## Deployment Checklist
@@ -81,18 +81,18 @@ When deploying to Vercel separately, ensure these environment variables are set:
 ### Backend Project (Vercel)
 ```bash
 CLIENT_URL=https://your-frontend.vercel.app
-GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/auth/google/callback
+GOOGLE_REDIRECT_URI=https://your-backend.vercel.app/api/google/callback
 # ... other backend env vars
 ```
 
 ### Frontend Project (Vercel)
 ```bash
-VITE_API_URL=https://your-backend.vercel.app/api/auth
+VITE_API_URL=https://your-backend.vercel.app/api
 ```
 
 ⚠️ **Important Notes:**
-- The `VITE_API_URL` must end with `/api/auth`
-- Do NOT include a trailing slash after `/auth`
+- The `VITE_API_URL` must end with `/api`
+- Do NOT include a trailing slash after `/api`
 - Variables are case-sensitive
 - Must redeploy after changing environment variables
 
@@ -102,13 +102,13 @@ VITE_API_URL=https://your-backend.vercel.app/api/auth
 ```bash
 cd frontend
 npm run dev
-# Should connect to http://localhost:5000/api/auth
+# Should connect to http://localhost:5000/api
 ```
 
 ### Test Production Build Locally
 ```bash
 cd frontend
-VITE_API_URL=https://your-backend.vercel.app/api/auth npm run build
+VITE_API_URL=https://your-backend.vercel.app/api npm run build
 npm run preview
 # Should connect to your Vercel backend
 ```
@@ -142,13 +142,13 @@ console.log(import.meta.env.VITE_API_URL);
 ## Common Mistakes to Avoid
 
 ❌ **Don't:**
-- Use `VITE_API_URL=https://your-backend.vercel.app` (missing `/api/auth`)
-- Use `VITE_API_URL=https://your-backend.vercel.app/api/auth/` (extra trailing slash)
+- Use `VITE_API_URL=https://your-backend.vercel.app` (missing `/api`)
+- Use `VITE_API_URL=https://your-backend.vercel.app/api/` (extra trailing slash)
 - Forget to redeploy after changing environment variables
 - Use quotes around values in Vercel environment variables UI
 
 ✅ **Do:**
-- Use exact format: `VITE_API_URL=https://your-backend.vercel.app/api/auth`
+- Use exact format: `VITE_API_URL=https://your-backend.vercel.app/api`
 - Redeploy both frontend and backend after initial setup
 - Verify environment variables in Vercel dashboard
 - Test locally with production build before deploying
@@ -166,7 +166,7 @@ If you still experience connection issues after applying this fix:
 
 1. Check browser console for CORS errors
 2. Verify both deployments are successful in Vercel dashboard
-3. Test backend directly by visiting: `https://your-backend.vercel.app/api/auth/check-auth`
+3. Test backend directly by visiting: `https://your-backend.vercel.app/api/check-auth`
 4. Ensure MongoDB connection is working (check backend logs in Vercel)
 5. Clear browser cache and cookies
 

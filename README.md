@@ -118,11 +118,11 @@ MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 # Google OAuth 2.0 (development)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+GOOGLE_REDIRECT_URI=http://localhost:5000/api/google/callback
 
 # Comma-separated list of allowed redirect URIs (required)
 # Used by the backend to validate the configured callback
-GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/auth/google/callback
+GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/google/callback
 
 # CORS Configuration
 # Comma-separated list of allowed origins (required)
@@ -144,10 +144,10 @@ NODE_ENV=production
 # Google OAuth 2.0 (production)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=https://your-app.onrender.com/api/auth/google/callback
+GOOGLE_REDIRECT_URI=https://your-app.onrender.com/api/google/callback
 
 # Allowed redirect URIs (required)
-GOOGLE_ALLOWED_REDIRECT_URIS=https://your-app.onrender.com/api/auth/google/callback
+GOOGLE_ALLOWED_REDIRECT_URIS=https://your-app.onrender.com/api/google/callback
 
 # CORS Configuration (required)
 # Add all your frontend URLs, including preview deployments if needed
@@ -176,7 +176,7 @@ CLIENT_URL=https://your-app.onrender.com
 
 ### Notes on Google redirect URIs
 
-- `GOOGLE_REDIRECT_URI` should contain the exact callback URL that Google will redirect to after auth, for example `http://localhost:5000/api/auth/google/callback` in development or `https://your-app.onrender.com/api/auth/google/callback` in production.
+- `GOOGLE_REDIRECT_URI` should contain the exact callback URL that Google will redirect to after auth, for example `http://localhost:5000/api/google/callback` in development or `https://your-app.onrender.com/api/google/callback` in production.
 - `GOOGLE_ALLOWED_REDIRECT_URIS` is **required** and must be a comma-separated list of valid redirect URIs. In production you should include your deployed callback URL here. The same deployed callback URL must also be added in your Google Cloud Console (APIs & Services → Credentials → OAuth 2.0 Client → Authorized redirect URIs).
 
 ### Google OAuth Setup (Step-by-Step)
@@ -218,7 +218,7 @@ CLIENT_URL=https://your-app.onrender.com
      - `http://localhost:5173` (frontend URL)
      - `http://localhost:5000` (backend URL)
    - Authorized redirect URIs:
-     - `http://localhost:5000/api/auth/google/callback`
+     - `http://localhost:5000/api/google/callback`
    - Click "Create"
 
 6. **Copy Credentials**
@@ -366,18 +366,18 @@ mern-advanced-auth/
 ## 🔑 Key API Endpoints
 
 ### Authentication
-- `POST /api/auth/signup` - Register new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
-- `GET /api/auth/check-auth` - Verify authentication
-- `POST /api/auth/verify-email` - Verify email with code
-- `POST /api/auth/forgot-password` - Request password reset
-- `POST /api/auth/reset-password/:token` - Reset password
-- `POST /api/auth/change-password` - Change password (protected)
+- `POST /api/signup` - Register new user
+- `POST /api/login` - Login user
+- `POST /api/logout` - Logout user
+- `GET /api/check-auth` - Verify authentication
+- `POST /api/verify-email` - Verify email with code
+- `POST /api/forgot-password` - Request password reset
+- `POST /api/reset-password/:token` - Reset password
+- `POST /api/change-password` - Change password (protected)
 
 ### Google OAuth
-- `GET /api/auth/google/url` - Get Google OAuth URL
-- `GET /api/auth/google/callback` - Handle Google OAuth callback
+- `GET /api/google/url` - Get Google OAuth URL
+- `GET /api/google/callback` - Handle Google OAuth callback
 
 ## 🛠️ Technologies Used
 

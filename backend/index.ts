@@ -27,7 +27,7 @@ app.use(cors(getCorsOptions()));
 app.use(express.json()); // allows us to parse incoming requests:req.body
 app.use(cookieParser()); // allows us to parse incoming cookies
 
-app.use("/api/auth", authRoutes);
+app.use("/api", authRoutes);
 
 // Only serve frontend static files in production for traditional deployment
 // (not when deployed separately to Vercel)
