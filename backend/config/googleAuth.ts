@@ -41,13 +41,19 @@ const initializeGoogleClient = (): OAuth2Client => {
     // Allow configuring the list of allowed redirect URIs via an env var:
     // GOOGLE_ALLOWED_REDIRECT_URIS - a comma-separated list of URIs.
     const allowedRedirectUrisEnv = process.env.GOOGLE_ALLOWED_REDIRECT_URIS;
+    
+    if (!allowedRedirectUrisEnv) {
+        throw new Error(
+            'GOOGLE_ALLOWED_REDIRECT_URIS environment variable is required. ' +
+            'Set it to a comma-separated list of allowed redirect URIs ' +
+            '(e.g., http://localhost:5000/api/auth/google/callback,https://your-backend.vercel.app/api/auth/google/callback)'
+        );
+    }
+    
     const allowedRedirectUris = allowedRedirectUrisEnv
-        ? allowedRedirectUrisEnv.split(',').map(u => u.trim()).filter(Boolean)
-        : [
-            'http://localhost:5000/api/auth/google/callback',
-            // For production add your deployed callback URI here or set
-            // GOOGLE_ALLOWED_REDIRECT_URIS in your environment.
-        ];
+        .split(',')
+        .map(u => u.trim())
+        .filter(Boolean);
 
     redirectUri = process.env.GOOGLE_REDIRECT_URI as string;
     

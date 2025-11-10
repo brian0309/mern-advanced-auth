@@ -120,11 +120,17 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
 
-# Optional: comma-separated list of allowed redirect URIs used by the backend to validate
-# the configured callback. You can include both dev and prod values here. Example:
-# GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/auth/google/callback,https://your-app.onrender.com/api/auth/google/callback
+# Comma-separated list of allowed redirect URIs (required)
+# Used by the backend to validate the configured callback
+GOOGLE_ALLOWED_REDIRECT_URIS=http://localhost:5000/api/auth/google/callback
 
-# Frontend URL
+# CORS Configuration
+# Comma-separated list of allowed origins (required)
+# Include all frontend URLs that should be allowed to make requests to the backend
+ALLOWED_ORIGINS=http://localhost:5173
+
+# Frontend URL (deprecated - use ALLOWED_ORIGINS instead)
+# Kept for backward compatibility
 CLIENT_URL=http://localhost:5173
 ```
 
@@ -140,23 +146,38 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=https://your-app.onrender.com/api/auth/google/callback
 
-# Allowed redirect URIs (backend validation)
+# Allowed redirect URIs (required)
 GOOGLE_ALLOWED_REDIRECT_URIS=https://your-app.onrender.com/api/auth/google/callback
 
-# Frontend URL (production)
+# CORS Configuration (required)
+# Add all your frontend URLs, including preview deployments if needed
+# Example: ALLOWED_ORIGINS=https://your-app.onrender.com,https://preview-123.onrender.com
+ALLOWED_ORIGINS=https://your-app.onrender.com
+
+# Frontend URL (deprecated - use ALLOWED_ORIGINS instead)
+# Kept for backward compatibility
 CLIENT_URL=https://your-app.onrender.com
 ```
 
-Notes:
+**Important Notes:**
 
+**CORS Configuration:**
+- `ALLOWED_ORIGINS` is now **required** and must be a comma-separated list of all frontend URLs allowed to make requests to the backend
+- Examples:
+  - Development: `ALLOWED_ORIGINS=http://localhost:5173`
+  - Production: `ALLOWED_ORIGINS=https://your-app.onrender.com`
+  - Multiple origins: `ALLOWED_ORIGINS=https://your-app.vercel.app,https://preview-123.vercel.app,https://preview-456.vercel.app`
+- `CLIENT_URL` is deprecated but kept for backward compatibility. Use `ALLOWED_ORIGINS` instead.
+
+**Google OAuth:**
 - `GOOGLE_REDIRECT_URI` must exactly match one of the Authorized redirect URIs configured in your Google Cloud Console for the OAuth client.
-- `GOOGLE_ALLOWED_REDIRECT_URIS` is optional but recommended in production. It's a comma-separated list the backend will use to validate `GOOGLE_REDIRECT_URI` at startup.
+- `GOOGLE_ALLOWED_REDIRECT_URIS` is **required** and must be a comma-separated list of valid redirect URIs the backend will accept.
 - On Render, set both `GOOGLE_REDIRECT_URI` and `GOOGLE_ALLOWED_REDIRECT_URIS` in the service's environment settings (do not commit secrets to source control).
 
 ### Notes on Google redirect URIs
 
 - `GOOGLE_REDIRECT_URI` should contain the exact callback URL that Google will redirect to after auth, for example `http://localhost:5000/api/auth/google/callback` in development or `https://your-app.onrender.com/api/auth/google/callback` in production.
-- `GOOGLE_ALLOWED_REDIRECT_URIS` is an optional comma-separated environment variable the backend will use to validate the configured callback. In production you should include your deployed callback URL here. The same deployed callback URL must also be added in your Google Cloud Console (APIs & Services → Credentials → OAuth 2.0 Client → Authorized redirect URIs).
+- `GOOGLE_ALLOWED_REDIRECT_URIS` is **required** and must be a comma-separated list of valid redirect URIs. In production you should include your deployed callback URL here. The same deployed callback URL must also be added in your Google Cloud Console (APIs & Services → Credentials → OAuth 2.0 Client → Authorized redirect URIs).
 
 ### Google OAuth Setup (Step-by-Step)
 

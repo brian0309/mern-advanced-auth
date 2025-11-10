@@ -28,6 +28,7 @@ describe('Auth Integration Tests - Complete Flows', () => {
 
     process.env.JWT_SECRET = 'test-jwt-secret-key';
     process.env.CLIENT_URL = 'http://localhost:3000';
+    process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
   });
 
   beforeEach(() => {
