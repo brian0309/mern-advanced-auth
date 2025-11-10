@@ -53,7 +53,7 @@ const SignUpPage: React.FC = () => {
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 						pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-						title="Please enter a valid email address with a proper domain (e.g., user@example.com)"
+						title="Please enter a valid email address"
 					/>
 					<Input
 						icon={Lock}
