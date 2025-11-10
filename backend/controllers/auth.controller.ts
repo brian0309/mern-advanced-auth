@@ -130,7 +130,18 @@ export const login = async (req: Request, res: Response): Promise<Response | voi
 };
 
 export const logout = async (req: Request, res: Response): Promise<Response> => {
-	res.clearCookie("token");
+	// Clear the cookie using the same attributes used when setting it.
+	const clearOptions: any = {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+	};
+
+	if (process.env.COOKIE_DOMAIN) {
+		clearOptions.domain = process.env.COOKIE_DOMAIN;
+	}
+
+	res.clearCookie("token", clearOptions);
 	return res.status(200).json({ success: true, message: "Logged out successfully" });
 };
 

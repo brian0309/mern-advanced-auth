@@ -48,6 +48,25 @@ CLIENT_URL=http://localhost:5173
 
 See `.env.example` in this directory for production/Vercel deployment.
 
+### Vercel / Production environment variables (quick reference)
+
+When deploying the backend separately to Vercel (recommended), set the following environment variables in the Vercel dashboard for the `backend` project:
+
+- `MONGO_URI` - MongoDB connection string (required)
+- `JWT_SECRET` - JWT signing secret (required)
+- `CLIENT_URL` - Frontend origin (e.g. `https://your-frontend.vercel.app`) (required)
+- `NODE_ENV` - set to `production` on Vercel (Vercel usually sets this automatically)
+- `MAILTRAP_TOKEN` and `MAILTRAP_ENDPOINT` - if using Mailtrap for emails (optional)
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` - Google OAuth settings (if using OAuth)
+- `ALLOWED_ORIGINS` - optional comma-separated allow-list of origins (useful for multiple preview deployments);
+    e.g. `https://frontend-pr-123.vercel.app,https://frontend-pr-456.vercel.app,https://your-frontend.vercel.app`
+- `COOKIE_DOMAIN` - optional domain for cookies (e.g. `.example.com`) when sharing cookies across subdomains
+
+Notes:
+- For cross-site cookies to work in production browsers, cookies must be set with `SameSite=None` and `Secure=true`. This project automatically uses `sameSite='none'` and `secure=true` when `NODE_ENV=production`.
+- If you deploy frontend and backend to different top-level domains (not subdomains of the same parent), cookies will still belong to the backend domain and must be sent with credentials from the frontend (the frontend code already sets credentials). If you need to share auth across unrelated top-level domains, use Authorization headers or a central auth domain.
+- To support many preview deployments, set `ALLOWED_ORIGINS` to include each preview origin or set it dynamically via your CI process.
+
 ## Deployment
 
 ### Deploy to Vercel (Separate Backend)

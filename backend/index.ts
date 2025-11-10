@@ -14,17 +14,15 @@ const __dirname: string = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import authRoutes from "./routes/auth.route.js";
+import { getCorsOptions } from "./config/dynamicCors.js";
 
 const app: Express = express();
 const PORT: number = parseInt(process.env.PORT || "5000", 10);
 
-// CORS configuration - allow both development and production origins
-const corsOptions = {
-	origin: process.env.CLIENT_URL || "http://localhost:5173",
-	credentials: true
-};
-
-app.use(cors(corsOptions));
+// Use a dynamic CORS configuration that reflects incoming origins against
+// an allow-list (supports multiple Vercel preview URLs). See
+// backend/config/dynamicCors.ts for details.
+app.use(cors(getCorsOptions()));
 
 app.use(express.json()); // allows us to parse incoming requests:req.body
 app.use(cookieParser()); // allows us to parse incoming cookies
