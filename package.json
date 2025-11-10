@@ -7,6 +7,7 @@
 		"dev": "cross-env NODE_ENV=development tsx watch backend/index.ts",
 		"start": "cross-env NODE_ENV=production node dist/backend/index.js",
 		"build": "npm install && tsc -p backend/tsconfig.json && npm install --prefix frontend && npm run build --prefix frontend",
+		"build:render": "npm install --include=dev && tsc -p backend/tsconfig.json && npm install --prefix frontend && npm run build --prefix frontend",
 		"build:backend": "tsc -p backend/tsconfig.json",
 		"type-check": "tsc -p backend/tsconfig.json --noEmit",
 		"type-check:watch": "tsc -p backend/tsconfig.json --noEmit --watch",
