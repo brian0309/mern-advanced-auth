@@ -74,8 +74,8 @@ await axios.get(`${API_URL}/auth/check-auth`);
 ```typescript
 import authRoutes from "./routes/auth.route.js";
 
-// Mount routes at /api prefix
-app.use("/api", authRoutes);
+// Mount auth routes at /api/auth prefix
+app.use("/api/auth", authRoutes);
 ```
 
 #### Backend Route Definitions (`backend/routes/auth.route.ts`)
@@ -83,11 +83,11 @@ app.use("/api", authRoutes);
 ```typescript
 const router = express.Router();
 
-// Define routes with /auth prefix
-router.post("/auth/signup", signup);
-router.post("/auth/login", login);
-router.post("/auth/logout", logout);
-router.get("/auth/check-auth", verifyToken, checkAuth);
+// Define routes without prefix (prefix is in mount point)
+router.post("/signup", signup);
+router.post("/login", login);
+router.post("/logout", logout);
+router.get("/check-auth", verifyToken, checkAuth);
 // ... more auth routes
 ```
 
@@ -126,10 +126,10 @@ import { verifyToken } from "../middleware/verifyToken.js";
 
 const router: Router = express.Router();
 
-// Define routes with /users prefix
-router.get("/users", verifyToken, getUsers);
-router.get("/users/:id", verifyToken, getUser);
-router.put("/users/:id", verifyToken, updateUser);
+// Define routes without prefix (prefix is in mount point)
+router.get("/", verifyToken, getUsers);
+router.get("/:id", verifyToken, getUser);
+router.put("/:id", verifyToken, updateUser);
 
 export default router;
 ```
@@ -140,9 +140,9 @@ export default router;
 import authRoutes from "./routes/auth.route.js";
 import usersRoutes from "./routes/users.route.js";
 
-// Mount both route sets at /api
-app.use("/api", authRoutes);
-app.use("/api", usersRoutes);  // Add this line
+// Mount each feature at its own path
+app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);  // Add this line
 ```
 
 3. **Use in frontend** (`frontend/src/store/userStore.ts`):
@@ -165,11 +165,12 @@ await axios.put(`${API_URL}/users/${userId}`, updateData);
 ```typescript
 const router = express.Router();
 
-router.get("/posts", getPosts);
-router.post("/posts", verifyToken, createPost);
-router.get("/posts/:id", getPost);
-router.put("/posts/:id", verifyToken, updatePost);
-router.delete("/posts/:id", verifyToken, deletePost);
+// Define routes without prefix (prefix is in mount point)
+router.get("/", getPosts);
+router.post("/", verifyToken, createPost);
+router.get("/:id", getPost);
+router.put("/:id", verifyToken, updatePost);
+router.delete("/:id", verifyToken, deletePost);
 
 export default router;
 ```
@@ -179,9 +180,9 @@ export default router;
 ```typescript
 import postsRoutes from "./routes/posts.route.js";
 
-app.use("/api", authRoutes);
-app.use("/api", usersRoutes);
-app.use("/api", postsRoutes);  // Add this line
+app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/posts", postsRoutes);  // Add this line
 ```
 
 3. **Use in frontend**:
