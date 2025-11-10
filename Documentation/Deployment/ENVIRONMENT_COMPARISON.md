@@ -11,7 +11,7 @@ Quick reference guide showing how the application runs in different environments
 | **Local Development** | `npm run dev` | `localhost:5000` | `localhost:5173` (Vite) | Separate servers, hot-reload |
 | **Production Local Test** | `npm run build` + `npm start` | `localhost:5000` | Served by backend | Single server |
 | **Heroku** | `npm run build` + `npm start` | Heroku dyno | Served by backend | Traditional hosting |
-| **Render** | `npm run build` + `npm start` | Render service | Served by backend | Traditional hosting |
+| **Render** | `npm run build:render` + `npm start` | Render service | Served by backend | Traditional hosting |
 | **Railway** | `npm run build` + `npm start` | Railway service | Served by backend | Traditional hosting |
 | **Vercel Separate** | Separate deployments | Backend serverless | Frontend CDN | **Recommended for Vercel** |
 | **Vercel Monolithic** | Single deployment | Serverless functions | Global CDN | Legacy approach |
