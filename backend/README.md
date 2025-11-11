@@ -37,6 +37,9 @@ MAILTRAP_TOKEN=your_mailtrap_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
 MAILTRAP_SENDER_EMAIL=mailtrap@demomailtrap.com
 MAILTRAP_SENDER_NAME=MERN Auth
+# Optional: Mailtrap template UUID for the welcome email. If set, the backend will try to use the Mailtrap-hosted template.
+# If the template UUID is missing or invalid, the backend falls back to a built-in HTML welcome template.
+MAILTRAP_WELCOME_TEMPLATE_UUID=your_mailtrap_welcome_template_uuid
 
 # Google OAuth 2.0
 GOOGLE_CLIENT_ID=your_google_client_id
