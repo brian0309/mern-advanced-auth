@@ -11,7 +11,8 @@ import {
   MessageSquare,
   PieChart,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Lightbulb
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -85,6 +86,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
       icon: <PieChart size={20} />, 
       label: 'Analytics', 
       to: '/analytics',
+      subItems: []
+    },
+    { 
+      icon: <Lightbulb size={20} />, 
+      label: 'Example', 
+      to: '/example',
       subItems: []
     },
   ];
