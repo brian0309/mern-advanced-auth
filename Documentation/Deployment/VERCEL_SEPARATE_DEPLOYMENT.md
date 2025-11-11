@@ -33,7 +33,7 @@ This repository supports **two deployment strategies**:
 
 ### Deploy Backend
 
-[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_ALLOWED_REDIRECT_URIS,ALLOWED_ORIGINS,CLIENT_URL,COOKIE_DOMAIN,NODE_ENV)
+[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,MAILTRAP_SENDER_EMAIL,MAILTRAP_SENDER_NAME,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_ALLOWED_REDIRECT_URIS,ALLOWED_ORIGINS,CLIENT_URL,COOKIE_DOMAIN,NODE_ENV)
 
 ### Deploy Frontend
 
@@ -81,6 +81,9 @@ This repository supports **two deployment strategies**:
    # Mailtrap
    MAILTRAP_TOKEN=your_mailtrap_api_token
    MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
+      # Optional: override the default from-address & display name used by the app
+      MAILTRAP_SENDER_EMAIL=mailtrap@demomailtrap.com
+      MAILTRAP_SENDER_NAME=MT5 Webhook
    
    # Google OAuth
    GOOGLE_CLIENT_ID=your_client_id.apps.googleusercontent.com

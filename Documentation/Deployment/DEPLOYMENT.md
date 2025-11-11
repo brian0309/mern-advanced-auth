@@ -189,6 +189,9 @@ Deploy to traditional hosting platforms like Heroku, Render, Railway, DigitalOce
    heroku config:set JWT_SECRET="your_jwt_secret"
    heroku config:set MAILTRAP_TOKEN="your_mailtrap_token"
    heroku config:set MAILTRAP_ENDPOINT="https://send.api.mailtrap.io/"
+   # Optional: override the sender used for outgoing emails
+   heroku config:set MAILTRAP_SENDER_EMAIL="mailtrap@demomailtrap.com"
+   heroku config:set MAILTRAP_SENDER_NAME="MERN Auth"
    heroku config:set GOOGLE_CLIENT_ID="your_google_client_id"
    heroku config:set GOOGLE_CLIENT_SECRET="your_google_client_secret"
    heroku config:set GOOGLE_REDIRECT_URI="https://your-app-name.herokuapp.com/api/auth/google/callback"
@@ -308,6 +311,9 @@ JWT_SECRET=your_strong_random_secret_here
 # Mailtrap Configuration
 MAILTRAP_TOKEN=your_mailtrap_api_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
+# Optional: override the default "from" email and name
+MAILTRAP_SENDER_EMAIL=mailtrap@demomailtrap.com
+MAILTRAP_SENDER_NAME=MT5 Webhook
 
 # Google OAuth 2.0
 GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com

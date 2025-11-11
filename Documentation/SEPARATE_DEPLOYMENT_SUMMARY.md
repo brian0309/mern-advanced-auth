@@ -155,6 +155,12 @@ MONGO_URI=mongodb+srv://...
 JWT_SECRET=your_secret
 MAILTRAP_TOKEN=your_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
+# Optional: sender override used by the app when sending emails
+# If these are not set, the application falls back to:
+#   MAILTRAP_SENDER_EMAIL -> mailtrap@demomailtrap.com
+#   MAILTRAP_SENDER_NAME  -> MERN Auth
+MAILTRAP_SENDER_EMAIL=mailtrap@demomailtrap.com
+MAILTRAP_SENDER_NAME=MERN Auth
 GOOGLE_CLIENT_ID=your_client_id
 GOOGLE_CLIENT_SECRET=your_secret
 GOOGLE_REDIRECT_URI=https://backend.vercel.app/api/auth/google/callback

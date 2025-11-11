@@ -114,6 +114,10 @@ JWT_SECRET=your_secret_key
 # Mailtrap (Email Service)
 MAILTRAP_TOKEN=your_mailtrap_token
 MAILTRAP_ENDPOINT=https://send.api.mailtrap.io/
+# Optional: override the "from" address and display name used for sent emails
+# If not set, the app falls back to mailtrap@demomailtrap.com /"MERN Auth"
+MAILTRAP_SENDER_EMAIL=mailtrap@demomailtrap.com
+MAILTRAP_SENDER_NAME=MERN Auth
 
 # Google OAuth 2.0 (development)
 GOOGLE_CLIENT_ID=your_google_client_id
@@ -435,9 +439,10 @@ This application supports **flexible deployment strategies**:
 
 Deploy frontend and backend as **separate Vercel projects** for maximum flexibility and performance:
 
+
 **Deploy Backend:**
 
-[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,CLIENT_URL,NODE_ENV)
+[![Deploy Backend to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/brian0309/mern-advanced-auth&project-name=mern-auth-backend&root-directory=backend&env=MONGO_URI,JWT_SECRET,MAILTRAP_TOKEN,MAILTRAP_ENDPOINT,MAILTRAP_SENDER_EMAIL,MAILTRAP_SENDER_NAME,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,CLIENT_URL,NODE_ENV)
 
 **Deploy Frontend:**
 
