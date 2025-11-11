@@ -215,6 +215,7 @@ describe('Feature Integration Tests', () => {
 
     app = express();
     app.use(express.json());
+    // lgtm[js/missing-token-validation] - Test environment only, CSRF not needed for unit tests
     app.use(cookieParser());
     app.use('/api/{feature}', featureRoutes);
 
@@ -327,6 +328,15 @@ See the `backend/services/example/` directory for a complete working example tha
 2. **User ID**: Access `req.userId` in controllers (set by middleware)
 3. **Validation**: Check if user exists in database
 4. **Error Responses**: Return 401 for unauthorized, 404 for not found
+
+### Security
+
+1. **Rate Limiting**: Consider adding rate limiting for production endpoints (not currently implemented in this codebase)
+2. **Input Validation**: Validate and sanitize all user inputs
+3. **SQL Injection**: Use Mongoose queries properly (parameterized queries)
+4. **CSRF Protection**: Test environments can suppress CSRF warnings with `// lgtm[js/missing-token-validation]` comment
+5. **Authentication**: Always use `verifyToken` middleware for protected routes
+6. **Secrets**: Never commit secrets or tokens to the repository
 
 ### Testing
 

@@ -18,6 +18,7 @@ describe('Example Feature Integration Tests', () => {
     // Create test app
     app = express();
     app.use(express.json());
+    // lgtm[js/missing-token-validation] - Test environment only, CSRF not needed for unit tests
     app.use(cookieParser());
     app.use('/api/example', exampleRoutes);
 
