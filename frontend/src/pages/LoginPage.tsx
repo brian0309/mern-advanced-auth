@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import { useAuthStore } from "../store/authStore";
 import GoogleLoginButton from "../components/GoogleLoginButton";
@@ -10,12 +10,21 @@ import GoogleLoginButton from "../components/GoogleLoginButton";
 const LoginPage: React.FC = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+	const navigate = useNavigate();
 
 	const { login, isLoading, error } = useAuthStore();
 
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
-		await login(email, password);
+		try {
+			await login(email, password);
+			const { user } = useAuthStore.getState();
+			if (user && !user.isVerified) {
+				navigate("/verify-email");
+			}
+		} catch (error) {
+			// Error is already set in the store
+		}
 	};
 
 	return (
@@ -37,6 +46,8 @@ const LoginPage: React.FC = () => {
 						placeholder='Email Address'
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
+						pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+						title="Please enter a valid email address"
 					/>
 
 					<Input

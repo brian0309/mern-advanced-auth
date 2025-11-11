@@ -11,12 +11,23 @@ import {
 } from "../mailtrap/emails.js";
 import { User } from "../models/user.model.js";
 
+// Email validation regex - requires proper domain with TLD
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+const validateEmail = (email: string): boolean => {
+	return emailRegex.test(email);
+};
+
 export const signup = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email, password, name } = req.body;
 
 	try {
 		if (!email || !password || !name) {
 			throw new Error("All fields are required");
+		}
+
+		if (!validateEmail(email)) {
+			throw new Error("Please enter a valid email address");
 		}
 
 		const userAlreadyExists = await User.findOne({ email });
@@ -95,6 +106,10 @@ export const verifyEmail = async (req: Request, res: Response): Promise<Response
 export const login = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email, password } = req.body;
 	try {
+		if (!validateEmail(email)) {
+			return res.status(400).json({ success: false, message: "Please enter a valid email address" });
+		}
+		
 		// Fetch full user document - need password for bcrypt comparison and most fields for response
 		const user = await User.findOne({ email });
 		if (!user) {
@@ -148,6 +163,10 @@ export const logout = async (req: Request, res: Response): Promise<Response> => 
 export const forgotPassword = async (req: Request, res: Response): Promise<Response | void> => {
 	const { email } = req.body;
 	try {
+		if (!validateEmail(email)) {
+			return res.status(400).json({ success: false, message: "Please enter a valid email address" });
+		}
+		
 		// Only select necessary fields for password reset
 		const user = await User.findOne({ email }).select('_id email resetPasswordToken resetPasswordExpiresAt');
 

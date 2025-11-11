@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, Outlet } from "react-router-dom";
+import { Navigate, Route, Routes, Outlet, useLocation } from "react-router-dom";
 
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
@@ -49,9 +49,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 // redirect authenticated users to the home page
 const RedirectAuthenticatedUser: React.FC<RedirectAuthenticatedUserProps> = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
+  const location = useLocation();
 
   if (isAuthenticated && user?.isVerified) {
     return <Navigate to='/' replace />;
+  }
+
+  // If user is authenticated but not verified, and they're not on the verify-email page,
+  // redirect them to verify-email
+  if (isAuthenticated && user && !user.isVerified && location.pathname !== '/verify-email') {
+    return <Navigate to='/verify-email' replace />;
   }
 
   return <>{children}</>;
