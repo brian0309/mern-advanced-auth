@@ -97,6 +97,18 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 		}
 	},
 
+	resendVerificationCode: async (): Promise<void> => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post<{ message: string }>(`${API_URL}/auth/resend-verification-code`);
+			set({ message: response.data.message, isLoading: false });
+		} catch (error) {
+			const axiosError = error as AxiosError<ApiErrorResponse>;
+			set({ error: axiosError.response?.data?.message || "Error resending verification code", isLoading: false });
+			throw error;
+		}
+	},
+
 	checkAuth: async (): Promise<void> => {
 		set({ isCheckingAuth: true, error: null });
 		try {

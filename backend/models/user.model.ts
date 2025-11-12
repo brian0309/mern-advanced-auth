@@ -37,6 +37,7 @@ const userSchema = new Schema<IUserDocument>(
 		resetPasswordExpiresAt: Date,
 		verificationToken: String,
 		verificationTokenExpiresAt: Date,
+		verificationTokenSentAt: Date,
 		// Google OAuth fields
 		googleId: {
 			type: String,
