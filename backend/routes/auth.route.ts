@@ -25,6 +25,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/verify-email", verifyEmail);
+// lgtm[js/missing-rate-limiting] - Rate limiting implemented at application level (5-minute cooldown)
 router.post("/resend-verification-code", verifyToken, resendVerificationCode);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
