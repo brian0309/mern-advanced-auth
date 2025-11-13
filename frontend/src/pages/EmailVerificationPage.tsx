@@ -10,7 +10,7 @@ const EmailVerificationPage: React.FC = () => {
 	const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 	const navigate = useNavigate();
 
-	const { error, isLoading, verifyEmail } = useAuthStore();
+	const { error, isLoading, verifyEmail, resendVerificationCode, message } = useAuthStore();
 
 	const handleChange = (index: number, value: string): void => {
 		const newCode = [...code];
@@ -57,6 +57,16 @@ const EmailVerificationPage: React.FC = () => {
 		}
 	};
 
+	const handleResendCode = async (): Promise<void> => {
+		try {
+			await resendVerificationCode();
+			toast.success("Verification code sent to your email");
+		} catch (error) {
+			// Error is already set in the store
+			console.log(error);
+		}
+	};
+
 	// Auto submit when all fields are filled
 	useEffect(() => {
 		if (code.every((digit) => digit !== "")) {
@@ -94,6 +104,7 @@ const EmailVerificationPage: React.FC = () => {
 						))}
 					</div>
 					{error && <p className='text-error font-semibold mt-2'>{error}</p>}
+					{message && <p className='text-green-500 font-semibold mt-2'>{message}</p>}
 					<motion.button
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
@@ -104,6 +115,18 @@ const EmailVerificationPage: React.FC = () => {
 						{isLoading ? "Verifying..." : "Verify Email"}
 					</motion.button>
 				</form>
+				<div className='mt-4 text-center'>
+					<p className='text-sm text-text-secondary'>
+						Didn't receive the code?{" "}
+						<button
+							onClick={handleResendCode}
+							disabled={isLoading}
+							className='text-primary hover:underline font-semibold disabled:opacity-50'
+						>
+							Resend Code
+						</button>
+					</p>
+				</div>
 			</motion.div>
 		</div>
 	);

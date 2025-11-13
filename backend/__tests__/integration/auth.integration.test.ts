@@ -5,6 +5,7 @@ import express, { Express } from 'express';
 import cookieParser from 'cookie-parser';
 import bcryptjs from 'bcryptjs';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 
 // Mock modules before importing
 jest.mock('../../models/user.model.js');
@@ -466,6 +467,97 @@ describe('Auth Integration Tests - Complete Flows', () => {
         .expect(201);
 
       expect(res.body.user.password).toBeUndefined();
+    });
+  });
+
+  describe('Resend Verification Code Flow', () => {
+    it('should successfully resend verification code', async () => {
+      const userId = '507f1f77bcf86cd799439011';
+      const token = jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+      
+      const mockUser = {
+        _id: userId,
+        email: 'test@example.com',
+        name: 'Test User',
+        isVerified: false,
+        verificationToken: '123456',
+        verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        verificationTokenSentAt: new Date(Date.now() - 6 * 60 * 1000), // 6 minutes ago
+        save: jest.fn().mockResolvedValue(true),
+      };
+
+      mockUserModel.findById.mockReturnValue({
+        select: jest.fn().mockResolvedValue(mockUser),
+      });
+
+      const res = await request(app)
+        .post('/api/auth/resend-verification-code')
+        .set('Cookie', [`token=${token}`])
+        .expect(200);
+
+      expect(res.body.success).toBe(true);
+      expect(res.body.message).toBe('Verification code sent to your email');
+      expect(mockUser.save).toHaveBeenCalled();
+    });
+
+    it('should reject resend for already verified user', async () => {
+      const userId = '507f1f77bcf86cd799439011';
+      const token = jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+      
+      const mockUser = {
+        _id: userId,
+        email: 'test@example.com',
+        name: 'Test User',
+        isVerified: true, // Already verified
+      };
+
+      mockUserModel.findById.mockReturnValue({
+        select: jest.fn().mockResolvedValue(mockUser),
+      });
+
+      const res = await request(app)
+        .post('/api/auth/resend-verification-code')
+        .set('Cookie', [`token=${token}`])
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe('Email is already verified');
+    });
+
+    it('should enforce 5-minute rate limit', async () => {
+      const userId = '507f1f77bcf86cd799439011';
+      const token = jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+      
+      const mockUser = {
+        _id: userId,
+        email: 'test@example.com',
+        name: 'Test User',
+        isVerified: false,
+        verificationToken: '123456',
+        verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        verificationTokenSentAt: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
+      };
+
+      mockUserModel.findById.mockReturnValue({
+        select: jest.fn().mockResolvedValue(mockUser),
+      });
+
+      const res = await request(app)
+        .post('/api/auth/resend-verification-code')
+        .set('Cookie', [`token=${token}`])
+        .expect(400);
+
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('Please wait');
+      expect(res.body.message).toContain('minute(s)');
+    });
+
+    it('should reject resend without authentication', async () => {
+      const res = await request(app)
+        .post('/api/auth/resend-verification-code')
+        .expect(401);
+
+      expect(res.body.success).toBe(false);
     });
   });
 });

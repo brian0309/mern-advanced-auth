@@ -16,6 +16,7 @@ export interface IUser {
   resetPasswordExpiresAt?: Date;
   verificationToken?: string;
   verificationTokenExpiresAt?: Date;
+  verificationTokenSentAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

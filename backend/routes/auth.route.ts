@@ -7,7 +7,8 @@ import {
 	forgotPassword,
 	resetPassword,
 	checkAuth,
-	changePassword
+	changePassword,
+	resendVerificationCode
 } from "../controllers/auth.controller.js";
 import { getGoogleAuthUrl, googleAuthCallback } from "../controllers/googleAuth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -24,6 +25,8 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/verify-email", verifyEmail);
+// lgtm[js/missing-rate-limiting] - Rate limiting implemented at application level (5-minute cooldown)
+router.post("/resend-verification-code", verifyToken, resendVerificationCode);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 router.post("/change-password", verifyToken, changePassword);

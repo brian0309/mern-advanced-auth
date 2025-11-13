@@ -46,6 +46,7 @@ export const signup = async (req: Request, res: Response): Promise<Response | vo
 			name,
 			verificationToken,
 			verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+			verificationTokenSentAt: new Date(),
 		});
 
 		await user.save();
@@ -76,7 +77,7 @@ export const verifyEmail = async (req: Request, res: Response): Promise<Response
 		const user = await User.findOne({
 			verificationToken: code,
 			verificationTokenExpiresAt: { $gt: Date.now() },
-		}).select('_id email name isVerified verificationToken verificationTokenExpiresAt');
+		}).select('_id email name isVerified verificationToken verificationTokenExpiresAt verificationTokenSentAt');
 
 		if (!user) {
 			return res.status(400).json({ success: false, message: "Invalid or expired verification code" });
@@ -85,6 +86,7 @@ export const verifyEmail = async (req: Request, res: Response): Promise<Response
 		user.isVerified = true;
 		user.verificationToken = undefined;
 		user.verificationTokenExpiresAt = undefined;
+		user.verificationTokenSentAt = undefined;
 		await user.save();
 
 		await sendWelcomeEmail(user.email, user.name);
@@ -100,6 +102,54 @@ export const verifyEmail = async (req: Request, res: Response): Promise<Response
 	} catch (error) {
 		console.log("error in verifyEmail ", error);
 		res.status(500).json({ success: false, message: "Server error" });
+	}
+};
+
+export const resendVerificationCode = async (req: Request, res: Response): Promise<Response | void> => {
+	try {
+		const user = await User.findById(req.userId).select('_id email name isVerified verificationToken verificationTokenExpiresAt verificationTokenSentAt');
+
+		if (!user) {
+			return res.status(400).json({ success: false, message: "User not found" });
+		}
+
+		if (user.isVerified) {
+			return res.status(400).json({ success: false, message: "Email is already verified" });
+		}
+
+		// Check if 5 minutes have passed since the last verification code was sent
+		if (user.verificationTokenSentAt) {
+			const timeSinceLastSent = Date.now() - new Date(user.verificationTokenSentAt).getTime();
+			const fiveMinutesInMs = 5 * 60 * 1000;
+
+			if (timeSinceLastSent < fiveMinutesInMs) {
+				const remainingTime = Math.ceil((fiveMinutesInMs - timeSinceLastSent) / 1000 / 60);
+				return res.status(400).json({ 
+					success: false, 
+					message: `Please wait ${remainingTime} minute(s) before requesting a new verification code` 
+				});
+			}
+		}
+
+		// Generate new verification token
+		const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+		user.verificationToken = verificationToken;
+		user.verificationTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+		user.verificationTokenSentAt = new Date();
+
+		await user.save();
+
+		// Send verification email
+		await sendVerificationEmail(user.email, verificationToken);
+
+		res.status(200).json({
+			success: true,
+			message: "Verification code sent to your email",
+		});
+	} catch (error) {
+		console.log("Error in resendVerificationCode ", error);
+		const errorMessage = error instanceof Error ? error.message : "An error occurred";
+		res.status(500).json({ success: false, message: errorMessage });
 	}
 };
 
