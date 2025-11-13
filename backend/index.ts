@@ -14,6 +14,7 @@ const __dirname: string = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import authRoutes from "./routes/auth.route.js";
+import exampleRoutes from "./services/example/routes/example.route.js";
 import { getCorsOptions } from "./config/dynamicCors.js";
 
 const app: Express = express();
@@ -28,6 +29,7 @@ app.use(express.json()); // allows us to parse incoming requests:req.body
 app.use(cookieParser()); // allows us to parse incoming cookies
 
 app.use("/api/auth", authRoutes);
+app.use("/api/example", exampleRoutes);
 
 // Only serve frontend static files in production for traditional deployment
 // (not when deployed separately to Vercel)

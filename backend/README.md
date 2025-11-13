@@ -106,6 +106,9 @@ All API endpoints are prefixed with `/api`. Authentication endpoints are under `
 - `GET /api/auth/google/url` - Get Google OAuth URL
 - `GET /api/auth/google/callback` - Handle Google OAuth callback
 
+### Example Feature
+- `GET /api/example/example` - Example protected endpoint (requires authentication)
+
 ## Project Structure
 
 ```
@@ -127,6 +130,19 @@ backend/
 │   └── user.model.ts            # User schema
 ├── routes/
 │   └── auth.route.ts            # Auth routes
+├── services/                    # Feature-based modules
+│   └── example/                 # Example feature (demonstrates architecture)
+│       ├── controllers/
+│       │   └── example.controller.ts
+│       ├── routes/
+│       │   └── example.route.ts
+│       ├── services/
+│       │   └── example.service.ts
+│       ├── types/
+│       │   └── example.types.ts
+│       └── __tests__/
+│           ├── example.test.ts
+│           └── example.service.test.ts
 ├── types/
 │   ├── api.types.ts
 │   ├── auth.types.ts
@@ -139,6 +155,22 @@ backend/
 ├── vercel.json                  # Vercel configuration (separate deployment)
 ├── .env.example                 # Example environment variables
 └── tsconfig.json                # TypeScript configuration
+```
+
+## Adding New Features
+
+The backend supports a feature-based architecture where each feature is self-contained in its own directory under `backend/services/`.
+
+For a comprehensive guide on adding new features, see [**Documentation/ADDING_FEATURES.md**](../Documentation/ADDING_FEATURES.md).
+
+Quick example:
+```
+backend/services/{feature-name}/
+├── controllers/     # HTTP request handlers
+├── routes/          # Route definitions
+├── services/        # Business logic
+├── types/           # TypeScript types
+└── __tests__/       # Feature tests
 ```
 
 ## TypeScript

@@ -17,6 +17,7 @@ import PostsPage from "./pages/posts";
 import MessagesPage from "./pages/messages";
 import CalendarPage from "./pages/calendar";
 import AnalyticsPage from "./pages/analytics";
+import ExamplePage from "./pages/ExamplePage";
 
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore";
@@ -150,6 +151,7 @@ function App() {
           <Route path='messages' element={<MessagesPage />} />
           <Route path='calendar' element={<CalendarPage />} />
           <Route path='analytics' element={<AnalyticsPage />} />
+          <Route path='example' element={<ExamplePage />} />
           <Route path='settings' element={<SettingsPage />} />
         </Route>
         
